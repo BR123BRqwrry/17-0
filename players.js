@@ -1007,6 +1007,398 @@ const PLAYER_DB = [
     { name: 'Jackie Slater', pos: ['OL'], team: 'Rams', decade: '1980s', rating: 89, stats: { 'AP': 3, 'PB': 7 }, badges: ['HOF'], synergies: [] },
     { name: 'Dermontti Dawson', pos: ['OL'], team: 'Steelers', decade: '1990s', rating: 93, stats: { 'AP': 6, 'PB': 7 }, badges: ['HOF'], synergies: [] },
     { name: 'Kevin Williams', pos: ['OL'], team: 'Cowboys', decade: '2000s', rating: 80, stats: { 'AP': 1, 'PB': 2 }, badges: [], synergies: [] },
+
+    // ============ GAP FILLS ============
+    // 49ers|1980s OL
+    { name: 'Jesse Sapolu', pos: ['OL'], team: '49ers', decade: '1980s', rating: 84, stats: { AP: 1, PB: 4 }, badges: [], synergies: [] },
+    { name: 'Randy Cross', pos: ['OL'], team: '49ers', decade: '1980s', rating: 86, stats: { AP: 3, PB: 3 }, badges: [], synergies: [] },
+    { name: 'Guy McIntyre', pos: ['OL'], team: '49ers', decade: '1980s', rating: 83, stats: { AP: 1, PB: 5 }, badges: [], synergies: [] },
+
+    // 49ers|1990s OL
+    { name: 'Jesse Sapolu', pos: ['OL'], team: '49ers', decade: '1990s', rating: 84, stats: { AP: 1, PB: 4 }, badges: [], synergies: [] },
+    { name: 'Harris Barton', pos: ['OL'], team: '49ers', decade: '1990s', rating: 83, stats: { AP: 1, PB: 2 }, badges: [], synergies: [] },
+
+    // 49ers|2000s WR, OL
+    { name: 'Terrell Owens', pos: ['WR1', 'WR2'], team: '49ers', decade: '2000s', rating: 93, stats: { YDS: 1412, TD: 13, YPR: '15.5' }, badges: ['HOF'], synergies: [] },
+    { name: 'Joe Staley', pos: ['OL'], team: '49ers', decade: '2000s', rating: 86, stats: { AP: 2, PB: 6 }, badges: [], synergies: [] },
+
+    // 49ers|2010s OL
+    { name: 'Joe Staley', pos: ['OL'], team: '49ers', decade: '2010s', rating: 89, stats: { AP: 2, PB: 6 }, badges: [], synergies: [] },
+    { name: 'Mike Iupati', pos: ['OL'], team: '49ers', decade: '2010s', rating: 85, stats: { AP: 1, PB: 4 }, badges: ['All-Pro'], synergies: [] },
+
+    // Bears|1980s TE
+    { name: 'Emery Moorehead', pos: ['TE'], team: 'Bears', decade: '1980s', rating: 78, stats: { YDS: 472, TD: 4, YPR: '11.3' }, badges: [], synergies: [] },
+
+    // Bengals|1980s TE
+    { name: 'Rodney Holman', pos: ['TE'], team: 'Bengals', decade: '1980s', rating: 84, stats: { YDS: 736, TD: 7, YPR: '12.5' }, badges: [], synergies: [] },
+
+    // Bengals|2020s TE, OL
+    { name: 'Irv Smith Jr.', pos: ['TE'], team: 'Bengals', decade: '2020s', rating: 76, stats: { YDS: 396, TD: 3, YPR: '10.4' }, badges: [], synergies: [] },
+    { name: 'Jonah Williams', pos: ['OL'], team: 'Bengals', decade: '2020s', rating: 79, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+    { name: 'Cordell Volson', pos: ['OL'], team: 'Bengals', decade: '2020s', rating: 76, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+
+    // Bills|1970s WR, TE, EDGE
+    { name: 'Bob Chandler', pos: ['WR1', 'WR2'], team: 'Bills', decade: '1970s', rating: 80, stats: { YDS: 786, TD: 6, YPR: '14.8' }, badges: [], synergies: [] },
+    { name: 'Paul Seymour', pos: ['TE'], team: 'Bills', decade: '1970s', rating: 76, stats: { YDS: 362, TD: 2, YPR: '11.0' }, badges: [], synergies: [] },
+    { name: 'Sherman White', pos: ['EDGE'], team: 'Bills', decade: '1970s', rating: 79, stats: { SACKS: '9*', FF: 2 }, badges: [], synergies: [] },
+
+    // Bills|1990s OL
+    { name: 'Kent Hull', pos: ['OL'], team: 'Bills', decade: '1990s', rating: 86, stats: { AP: 2, PB: 3 }, badges: [], synergies: [] },
+    { name: 'Will Wolford', pos: ['OL'], team: 'Bills', decade: '1990s', rating: 84, stats: { AP: 1, PB: 3 }, badges: [], synergies: [] },
+
+    // Bills|2020s OL
+    { name: 'Dion Dawkins', pos: ['OL'], team: 'Bills', decade: '2020s', rating: 83, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+    { name: 'Spencer Brown', pos: ['OL'], team: 'Bills', decade: '2020s', rating: 79, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+
+    // Broncos|1970s TE, OL
+    { name: 'Riley Odoms', pos: ['TE'], team: 'Broncos', decade: '1970s', rating: 82, stats: { YDS: 561, TD: 5, YPR: '12.4' }, badges: [], synergies: [] },
+    { name: 'Claudie Minor', pos: ['OL'], team: 'Broncos', decade: '1970s', rating: 80, stats: { AP: 1, PB: 2 }, badges: [], synergies: [] },
+
+    // Broncos|1980s TE, OL
+    { name: 'Clarence Kay', pos: ['TE'], team: 'Broncos', decade: '1980s', rating: 77, stats: { YDS: 398, TD: 3, YPR: '11.7' }, badges: [], synergies: [] },
+    { name: 'Keith Bishop', pos: ['OL'], team: 'Broncos', decade: '1980s', rating: 82, stats: { AP: 1, PB: 3 }, badges: [], synergies: [] },
+
+    // Broncos|1990s OL
+    { name: 'Gary Zimmerman', pos: ['OL'], team: 'Broncos', decade: '1990s', rating: 92, stats: { AP: 4, PB: 7 }, badges: ['HOF'], synergies: [] },
+    { name: 'Mark Schlereth', pos: ['OL'], team: 'Broncos', decade: '1990s', rating: 82, stats: { AP: 0, PB: 3 }, badges: [], synergies: [] },
+
+    // Broncos|2000s OL
+    { name: 'Matt Lepsis', pos: ['OL'], team: 'Broncos', decade: '2000s', rating: 81, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+    { name: 'Tom Nalen', pos: ['OL'], team: 'Broncos', decade: '2000s', rating: 87, stats: { AP: 3, PB: 5 }, badges: [], synergies: [] },
+
+    // Broncos|2010s TE, OL
+    { name: 'Julius Thomas', pos: ['TE'], team: 'Broncos', decade: '2010s', rating: 82, stats: { YDS: 788, TD: 12, YPR: '12.4' }, badges: [], synergies: [] },
+    { name: 'Ryan Clady', pos: ['OL'], team: 'Broncos', decade: '2010s', rating: 87, stats: { AP: 2, PB: 4 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Garett Bolles', pos: ['OL'], team: 'Broncos', decade: '2010s', rating: 82, stats: { AP: 1, PB: 1 }, badges: [], synergies: [] },
+
+    // Browns|1960s TE, OL
+    { name: 'Milt Morin', pos: ['TE'], team: 'Browns', decade: '1960s', rating: 80, stats: { YDS: 578, TD: 4, YPR: '13.1' }, badges: [], synergies: [] },
+    { name: 'Dick Schafrath', pos: ['OL'], team: 'Browns', decade: '1960s', rating: 87, stats: { AP: 3, PB: 6 }, badges: [], synergies: [] },
+    { name: 'Gene Hickerson', pos: ['OL'], team: 'Browns', decade: '1960s', rating: 90, stats: { AP: 4, PB: 6 }, badges: ['HOF'], synergies: [] },
+
+    // Browns|2020s OL
+    { name: 'Jedrick Wills', pos: ['OL'], team: 'Browns', decade: '2020s', rating: 79, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+    { name: 'Wyatt Teller', pos: ['OL'], team: 'Browns', decade: '2020s', rating: 88, stats: { AP: 2, PB: 3 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Joel Bitonio', pos: ['OL'], team: 'Browns', decade: '2020s', rating: 90, stats: { AP: 3, PB: 6 }, badges: ['All-Pro'], synergies: [] },
+
+    // Browns|2010s (full roster)
+    { name: 'Josh Gordon', pos: ['WR1', 'WR2'], team: 'Browns', decade: '2010s', rating: 83, stats: { YDS: 1646, TD: 9, YPR: '17.8' }, badges: [], synergies: [] },
+    { name: 'Joe Haden', pos: ['DB'], team: 'Browns', decade: '2010s', rating: 83, stats: { INT: 5, PD: 13 }, badges: [], synergies: [] },
+    { name: 'Myles Garrett', pos: ['EDGE'], team: 'Browns', decade: '2010s', rating: 89, stats: { SACKS: 13.5, FF: 3 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Nick Chubb', pos: ['RB'], team: 'Browns', decade: '2010s', rating: 85, stats: { YDS: 1494, TD: 8, YPC: '5.0' }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Baker Mayfield', pos: ['QB'], team: 'Browns', decade: '2010s', rating: 78, stats: { YDS: 3563, TD: 22, 'CMP%': '61.6' }, badges: [], synergies: [] },
+    { name: 'Jarvis Landry', pos: ['WR1', 'WR2'], team: 'Browns', decade: '2010s', rating: 81, stats: { YDS: 1174, TD: 6, YPR: '12.1' }, badges: [], synergies: [] },
+    { name: 'Joel Bitonio', pos: ['OL'], team: 'Browns', decade: '2010s', rating: 88, stats: { AP: 2, PB: 5 }, badges: ['All-Pro'], synergies: [] },
+
+    // Buccaneers|1980s (full starters)
+    { name: 'Doug Williams', pos: ['QB'], team: 'Buccaneers', decade: '1980s', rating: 80, stats: { YDS: 2448, TD: 16, 'CMP%': '52.0' }, badges: ['SB MVP'], synergies: [] },
+    { name: 'James Wilder', pos: ['RB'], team: 'Buccaneers', decade: '1980s', rating: 83, stats: { YDS: 1300, TD: 10, YPC: '3.9' }, badges: [], synergies: [] },
+    { name: 'Kevin House', pos: ['WR1', 'WR2'], team: 'Buccaneers', decade: '1980s', rating: 80, stats: { YDS: 842, TD: 5, YPR: '17.1' }, badges: [], synergies: [] },
+    { name: 'Jimmie Giles', pos: ['TE'], team: 'Buccaneers', decade: '1980s', rating: 82, stats: { YDS: 665, TD: 7, YPR: '13.5' }, badges: [], synergies: [] },
+    { name: 'Hugh Green', pos: ['EDGE'], team: 'Buccaneers', decade: '1980s', rating: 82, stats: { SACKS: 8.5, FF: 3 }, badges: [], synergies: [] },
+    { name: 'Cedric Brown', pos: ['DB'], team: 'Buccaneers', decade: '1980s', rating: 78, stats: { INT: 4, PD: 9 }, badges: [], synergies: [] },
+
+    // Buccaneers|2000s TE, OL
+    { name: 'Kellen Winslow II', pos: ['TE'], team: 'Buccaneers', decade: '2000s', rating: 80, stats: { YDS: 672, TD: 5, YPR: '11.2' }, badges: [], synergies: [] },
+    { name: 'Lomas Brown', pos: ['OL'], team: 'Buccaneers', decade: '2000s', rating: 80, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+
+    // Buccaneers|2010s RB, TE, OL
+    { name: 'Doug Martin', pos: ['RB'], team: 'Buccaneers', decade: '2010s', rating: 82, stats: { YDS: 1454, TD: 11, YPC: '4.2' }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Cameron Brate', pos: ['TE'], team: 'Buccaneers', decade: '2010s', rating: 79, stats: { YDS: 591, TD: 6, YPR: '11.6' }, badges: [], synergies: [] },
+    { name: 'Ali Marpet', pos: ['OL'], team: 'Buccaneers', decade: '2010s', rating: 84, stats: { AP: 1, PB: 1 }, badges: [], synergies: [] },
+
+    // Buccaneers|2020s TE
+    { name: 'Rob Gronkowski', pos: ['TE'], team: 'Buccaneers', decade: '2020s', rating: 89, stats: { YDS: 802, TD: 6, YPR: '12.5' }, badges: ['HOF'], synergies: [] },
+
+    // Cardinals|2000s TE, OL
+    { name: 'Leonard Pope', pos: ['TE'], team: 'Cardinals', decade: '2000s', rating: 75, stats: { YDS: 298, TD: 2, YPR: '10.3' }, badges: [], synergies: [] },
+    { name: 'Levi Brown', pos: ['OL'], team: 'Cardinals', decade: '2000s', rating: 76, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+
+    // Cardinals|2020s OL, EDGE
+    { name: 'D.J. Humphries', pos: ['OL'], team: 'Cardinals', decade: '2020s', rating: 81, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+    { name: 'Dennis Gardeck', pos: ['EDGE'], team: 'Cardinals', decade: '2020s', rating: 78, stats: { SACKS: 7, FF: 2 }, badges: [], synergies: [] },
+
+    // Chargers|1960s TE
+    { name: 'Dave Kocourek', pos: ['TE'], team: 'Chargers', decade: '1960s', rating: 81, stats: { YDS: 672, TD: 5, YPR: '14.8' }, badges: [], synergies: [] },
+
+    // Chargers|1980s OL
+    { name: 'Ed White', pos: ['OL'], team: 'Chargers', decade: '1980s', rating: 84, stats: { AP: 2, PB: 4 }, badges: [], synergies: [] },
+    { name: 'Don Macek', pos: ['OL'], team: 'Chargers', decade: '1980s', rating: 81, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+
+    // Chargers|2000s OL, DB
+    { name: 'Marcus McNeill', pos: ['OL'], team: 'Chargers', decade: '2000s', rating: 84, stats: { AP: 1, PB: 3 }, badges: [], synergies: [] },
+    { name: 'Quentin Jammer', pos: ['DB'], team: 'Chargers', decade: '2000s', rating: 81, stats: { INT: 3, PD: 14 }, badges: [], synergies: [] },
+
+    // Chargers|2020s TE
+    { name: 'Gerald Everett', pos: ['TE'], team: 'Chargers', decade: '2020s', rating: 77, stats: { YDS: 535, TD: 4, YPR: '10.8' }, badges: [], synergies: [] },
+
+    // Chiefs|1960s OL
+    { name: 'Jim Tyrer', pos: ['OL'], team: 'Chiefs', decade: '1960s', rating: 87, stats: { AP: 3, PB: 6 }, badges: [], synergies: [] },
+    { name: 'Ed Budde', pos: ['OL'], team: 'Chiefs', decade: '1960s', rating: 85, stats: { AP: 2, PB: 6 }, badges: [], synergies: [] },
+
+    // Chiefs|1990s WR
+    { name: 'Andre Rison', pos: ['WR1', 'WR2'], team: 'Chiefs', decade: '1990s', rating: 82, stats: { YDS: 844, TD: 7, YPR: '13.2' }, badges: [], synergies: [] },
+
+    // Chiefs|2010s OL
+    { name: 'Mitchell Schwartz', pos: ['OL'], team: 'Chiefs', decade: '2010s', rating: 88, stats: { AP: 2, PB: 2 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Eric Fisher', pos: ['OL'], team: 'Chiefs', decade: '2010s', rating: 82, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+
+    // Colts|2020s (full roster)
+    { name: 'Anthony Richardson', pos: ['QB'], team: 'Colts', decade: '2020s', rating: 78, stats: { YDS: 2584, TD: 15, 'CMP%': '55.0' }, badges: [], synergies: [] },
+    { name: 'Jonathan Taylor', pos: ['RB'], team: 'Colts', decade: '2020s', rating: 87, stats: { YDS: 1218, TD: 10, YPC: '4.9' }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Michael Pittman Jr.', pos: ['WR1', 'WR2'], team: 'Colts', decade: '2020s', rating: 82, stats: { YDS: 1015, TD: 5, YPR: '12.2' }, badges: [], synergies: [] },
+    { name: 'DeForest Buckner', pos: ['EDGE'], team: 'Colts', decade: '2020s', rating: 87, stats: { SACKS: 8, FF: 3 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Kenny Moore II', pos: ['DB'], team: 'Colts', decade: '2020s', rating: 83, stats: { INT: 4, PD: 11 }, badges: [], synergies: [] },
+
+    // Commanders|1990s TE, OL
+    { name: 'Ethan Horton', pos: ['TE'], team: 'Commanders', decade: '1990s', rating: 77, stats: { YDS: 385, TD: 3, YPR: '11.0' }, badges: [], synergies: [] },
+    { name: 'Jim Lachey', pos: ['OL'], team: 'Commanders', decade: '1990s', rating: 88, stats: { AP: 3, PB: 3 }, badges: [], synergies: [] },
+
+    // Commanders|2010s (full roster)
+    { name: 'Kirk Cousins', pos: ['QB'], team: 'Commanders', decade: '2010s', rating: 81, stats: { YDS: 4093, TD: 25, 'CMP%': '65.9' }, badges: [], synergies: [] },
+    { name: 'Alfred Morris', pos: ['RB'], team: 'Commanders', decade: '2010s', rating: 82, stats: { YDS: 1613, TD: 13, YPC: '4.8' }, badges: [], synergies: [] },
+    { name: 'DeSean Jackson', pos: ['WR1', 'WR2'], team: 'Commanders', decade: '2010s', rating: 83, stats: { YDS: 1042, TD: 6, YPR: '17.9' }, badges: [], synergies: [] },
+    { name: 'Jordan Reed', pos: ['TE'], team: 'Commanders', decade: '2010s', rating: 83, stats: { YDS: 877, TD: 11, YPR: '12.0' }, badges: [], synergies: [] },
+    { name: 'Ryan Kerrigan', pos: ['EDGE'], team: 'Commanders', decade: '2010s', rating: 84, stats: { SACKS: 11, FF: 3 }, badges: [], synergies: [] },
+    { name: 'DeAngelo Hall', pos: ['DB'], team: 'Commanders', decade: '2010s', rating: 80, stats: { INT: 4, PD: 11 }, badges: [], synergies: [] },
+
+    // Cowboys|1980s OL
+    { name: 'Pat Donovan', pos: ['OL'], team: 'Cowboys', decade: '1980s', rating: 83, stats: { AP: 1, PB: 4 }, badges: [], synergies: [] },
+    { name: 'Mark Tuinei', pos: ['OL'], team: 'Cowboys', decade: '1980s', rating: 81, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+
+    // Cowboys|2020s OL
+    { name: 'Tyler Smith', pos: ['OL'], team: 'Cowboys', decade: '2020s', rating: 84, stats: { AP: 1, PB: 2 }, badges: [], synergies: [] },
+    { name: 'Zack Martin', pos: ['OL'], team: 'Cowboys', decade: '2020s', rating: 92, stats: { AP: 5, PB: 7 }, badges: ['HOF', 'All-Pro'], synergies: [] },
+
+    // Dolphins|1980s RB
+    { name: 'Andra Franklin', pos: ['RB'], team: 'Dolphins', decade: '1980s', rating: 78, stats: { YDS: 746, TD: 7, YPC: '3.8' }, badges: [], synergies: [] },
+    { name: 'Tony Nathan', pos: ['RB'], team: 'Dolphins', decade: '1980s', rating: 79, stats: { YDS: 782, TD: 5, YPC: '4.3' }, badges: [], synergies: [] },
+
+    // Dolphins|2020s TE, OL
+    { name: 'Jonnu Smith', pos: ['TE'], team: 'Dolphins', decade: '2020s', rating: 80, stats: { YDS: 625, TD: 5, YPR: '11.4' }, badges: [], synergies: [] },
+    { name: 'Terron Armstead', pos: ['OL'], team: 'Dolphins', decade: '2020s', rating: 87, stats: { AP: 1, PB: 5 }, badges: [], synergies: [] },
+
+    // Eagles|1980s OL
+    { name: 'Ron Baker', pos: ['OL'], team: 'Eagles', decade: '1980s', rating: 80, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+    { name: 'Jerry Sisemore', pos: ['OL'], team: 'Eagles', decade: '1980s', rating: 83, stats: { AP: 1, PB: 2 }, badges: [], synergies: [] },
+
+    // Eagles|1990s OL
+    { name: 'Tra Thomas', pos: ['OL'], team: 'Eagles', decade: '1990s', rating: 84, stats: { AP: 1, PB: 3 }, badges: [], synergies: [] },
+    { name: 'Jon Runyan', pos: ['OL'], team: 'Eagles', decade: '1990s', rating: 81, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+
+    // Eagles|2000s OL
+    { name: 'Tra Thomas', pos: ['OL'], team: 'Eagles', decade: '2000s', rating: 85, stats: { AP: 1, PB: 3 }, badges: [], synergies: [] },
+    { name: 'Jon Runyan', pos: ['OL'], team: 'Eagles', decade: '2000s', rating: 83, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+    { name: 'Shawn Andrews', pos: ['OL'], team: 'Eagles', decade: '2000s', rating: 84, stats: { AP: 2, PB: 2 }, badges: ['All-Pro'], synergies: [] },
+
+    // Eagles|2010s OL
+    { name: 'Jason Peters', pos: ['OL'], team: 'Eagles', decade: '2010s', rating: 91, stats: { AP: 4, PB: 9 }, badges: ['All-Pro'], synergies: [] },
+
+    // Falcons|2010s OL
+    { name: 'Jake Matthews', pos: ['OL'], team: 'Falcons', decade: '2010s', rating: 83, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+    { name: 'Alex Mack', pos: ['OL'], team: 'Falcons', decade: '2010s', rating: 87, stats: { AP: 2, PB: 6 }, badges: ['All-Pro'], synergies: [] },
+
+    // Giants|1980s WR, OL
+    { name: 'Lionel Manuel', pos: ['WR1', 'WR2'], team: 'Giants', decade: '1980s', rating: 79, stats: { YDS: 792, TD: 5, YPR: '13.6' }, badges: [], synergies: [] },
+    { name: 'Brad Benson', pos: ['OL'], team: 'Giants', decade: '1980s', rating: 81, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+
+    // Giants|2000s OL
+    { name: 'Shaun O\'Hara', pos: ['OL'], team: 'Giants', decade: '2000s', rating: 83, stats: { AP: 1, PB: 2 }, badges: [], synergies: [] },
+    { name: 'David Diehl', pos: ['OL'], team: 'Giants', decade: '2000s', rating: 81, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+
+    // Giants|2010s TE, OL
+    { name: 'Evan Engram', pos: ['TE'], team: 'Giants', decade: '2010s', rating: 79, stats: { YDS: 654, TD: 6, YPR: '12.3' }, badges: [], synergies: [] },
+    { name: 'Justin Pugh', pos: ['OL'], team: 'Giants', decade: '2010s', rating: 81, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+
+    // Jaguars|1990s TE
+    { name: 'Pete Mitchell', pos: ['TE'], team: 'Jaguars', decade: '1990s', rating: 78, stats: { YDS: 512, TD: 3, YPR: '10.9' }, badges: [], synergies: [] },
+
+    // Jets|1960s TE, OL
+    { name: 'Pete Lammons', pos: ['TE'], team: 'Jets', decade: '1960s', rating: 78, stats: { YDS: 536, TD: 4, YPR: '13.2' }, badges: [], synergies: [] },
+    { name: 'Winston Hill', pos: ['OL'], team: 'Jets', decade: '1960s', rating: 85, stats: { AP: 2, PB: 8 }, badges: [], synergies: [] },
+
+    // Jets|1980s TE, OL, DB
+    { name: 'Mickey Shuler', pos: ['TE'], team: 'Jets', decade: '1980s', rating: 80, stats: { YDS: 589, TD: 4, YPR: '11.5' }, badges: [], synergies: [] },
+    { name: 'Marvin Powell', pos: ['OL'], team: 'Jets', decade: '1980s', rating: 85, stats: { AP: 2, PB: 5 }, badges: [], synergies: [] },
+    { name: 'Jerry Holmes', pos: ['DB'], team: 'Jets', decade: '1980s', rating: 78, stats: { INT: 4, PD: 9 }, badges: [], synergies: [] },
+
+    // Jets|2000s TE
+    { name: 'Anthony Becht', pos: ['TE'], team: 'Jets', decade: '2000s', rating: 76, stats: { YDS: 378, TD: 3, YPR: '10.2' }, badges: [], synergies: [] },
+
+    // Jets|2020s TE, OL
+    { name: 'Tyler Conklin', pos: ['TE'], team: 'Jets', decade: '2020s', rating: 79, stats: { YDS: 621, TD: 3, YPR: '10.5' }, badges: [], synergies: [] },
+    { name: 'Alijah Vera-Tucker', pos: ['OL'], team: 'Jets', decade: '2020s', rating: 82, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+
+    // Lions|1990s TE
+    { name: 'Ron Hall', pos: ['TE'], team: 'Lions', decade: '1990s', rating: 76, stats: { YDS: 352, TD: 2, YPR: '10.4' }, badges: [], synergies: [] },
+
+    // Lions|2010s RB, TE, OL
+    { name: 'Reggie Bush', pos: ['RB'], team: 'Lions', decade: '2010s', rating: 79, stats: { YDS: 1006, TD: 4, YPC: '4.3' }, badges: [], synergies: [] },
+    { name: 'Eric Ebron', pos: ['TE'], team: 'Lions', decade: '2010s', rating: 78, stats: { YDS: 574, TD: 5, YPR: '11.8' }, badges: [], synergies: [] },
+    { name: 'Taylor Decker', pos: ['OL'], team: 'Lions', decade: '2010s', rating: 82, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+
+    // Packers|1990s OL
+    { name: 'Frank Winters', pos: ['OL'], team: 'Packers', decade: '1990s', rating: 82, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+    { name: 'Adam Timmerman', pos: ['OL'], team: 'Packers', decade: '1990s', rating: 81, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+
+    // Packers|2020s OL
+    { name: 'Elgton Jenkins', pos: ['OL'], team: 'Packers', decade: '2020s', rating: 85, stats: { AP: 1, PB: 2 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Josh Myers', pos: ['OL'], team: 'Packers', decade: '2020s', rating: 79, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+
+    // Panthers|2010s OL
+    { name: 'Trai Turner', pos: ['OL'], team: 'Panthers', decade: '2010s', rating: 84, stats: { AP: 1, PB: 5 }, badges: [], synergies: [] },
+    { name: 'Michael Oher', pos: ['OL'], team: 'Panthers', decade: '2010s', rating: 79, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+
+    // Patriots|2000s TE, OL
+    { name: 'Benjamin Watson', pos: ['TE'], team: 'Patriots', decade: '2000s', rating: 79, stats: { YDS: 643, TD: 4, YPR: '12.3' }, badges: [], synergies: [] },
+    { name: 'Matt Light', pos: ['OL'], team: 'Patriots', decade: '2000s', rating: 85, stats: { AP: 1, PB: 3 }, badges: [], synergies: [] },
+
+    // Patriots|2010s OL
+    { name: 'Nate Solder', pos: ['OL'], team: 'Patriots', decade: '2010s', rating: 83, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+    { name: 'Shaq Mason', pos: ['OL'], team: 'Patriots', decade: '2010s', rating: 85, stats: { AP: 1, PB: 2 }, badges: ['All-Pro'], synergies: [] },
+
+    // Raiders|1980s WR, OL
+    { name: 'Tim Brown', pos: ['WR1', 'WR2'], team: 'Raiders', decade: '1980s', rating: 82, stats: { YDS: 725, TD: 5, YPR: '14.8' }, badges: ['HOF'], synergies: [] },
+    { name: 'Henry Lawrence', pos: ['OL'], team: 'Raiders', decade: '1980s', rating: 84, stats: { AP: 1, PB: 3 }, badges: [], synergies: [] },
+
+    // Raiders|1990s (full roster)
+    { name: 'Jeff Hostetler', pos: ['QB'], team: 'Raiders', decade: '1990s', rating: 79, stats: { YDS: 3242, TD: 16, 'CMP%': '57.2' }, badges: [], synergies: [] },
+    { name: 'Tim Brown', pos: ['WR1', 'WR2'], team: 'Raiders', decade: '1990s', rating: 89, stats: { YDS: 1408, TD: 9, YPR: '14.5' }, badges: ['HOF'], synergies: [] },
+    { name: 'Napoleon Kaufman', pos: ['RB'], team: 'Raiders', decade: '1990s', rating: 81, stats: { YDS: 1294, TD: 6, YPC: '5.0' }, badges: [], synergies: [] },
+    { name: 'Rocket Ismail', pos: ['WR1', 'WR2'], team: 'Raiders', decade: '1990s', rating: 80, stats: { YDS: 1049, TD: 5, YPR: '15.8' }, badges: [], synergies: [] },
+    { name: 'Darrell Russell', pos: ['EDGE'], team: 'Raiders', decade: '1990s', rating: 83, stats: { SACKS: 8.5, FF: 2 }, badges: [], synergies: [] },
+    { name: 'Terry McDaniel', pos: ['DB'], team: 'Raiders', decade: '1990s', rating: 84, stats: { INT: 6, PD: 13 }, badges: [], synergies: [] },
+    { name: 'Chester McGlockton', pos: ['EDGE'], team: 'Raiders', decade: '1990s', rating: 84, stats: { SACKS: 7.5, FF: 3 }, badges: [], synergies: [] },
+
+    // Raiders|2010s TE, OL
+    { name: 'Jared Cook', pos: ['TE'], team: 'Raiders', decade: '2010s', rating: 81, stats: { YDS: 896, TD: 6, YPR: '13.2' }, badges: [], synergies: [] },
+    { name: 'Rodney Hudson', pos: ['OL'], team: 'Raiders', decade: '2010s', rating: 88, stats: { AP: 2, PB: 3 }, badges: ['All-Pro'], synergies: [] },
+
+    // Raiders|2020s QB, OL
+    { name: 'Derek Carr', pos: ['QB'], team: 'Raiders', decade: '2020s', rating: 80, stats: { YDS: 3522, TD: 24, 'CMP%': '60.8' }, badges: [], synergies: [] },
+    { name: 'Kolton Miller', pos: ['OL'], team: 'Raiders', decade: '2020s', rating: 83, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+
+    // Rams|1960s TE, OL
+    { name: 'Marlin McKeever', pos: ['TE'], team: 'Rams', decade: '1960s', rating: 77, stats: { YDS: 392, TD: 3, YPR: '12.6' }, badges: [], synergies: [] },
+    { name: 'Charlie Cowan', pos: ['OL'], team: 'Rams', decade: '1960s', rating: 83, stats: { AP: 1, PB: 3 }, badges: [], synergies: [] },
+
+    // Rams|1980s TE
+    { name: 'David Hill', pos: ['TE'], team: 'Rams', decade: '1980s', rating: 77, stats: { YDS: 405, TD: 3, YPR: '11.6' }, badges: [], synergies: [] },
+
+    // Rams|2000s TE
+    { name: 'Ernie Conwell', pos: ['TE'], team: 'Rams', decade: '2000s', rating: 77, stats: { YDS: 426, TD: 4, YPR: '10.8' }, badges: [], synergies: [] },
+
+    // Rams|2010s TE, OL
+    { name: 'Tyler Higbee', pos: ['TE'], team: 'Rams', decade: '2010s', rating: 79, stats: { YDS: 542, TD: 4, YPR: '11.1' }, badges: [], synergies: [] },
+    { name: 'Andrew Whitworth', pos: ['OL'], team: 'Rams', decade: '2010s', rating: 88, stats: { AP: 2, PB: 4 }, badges: [], synergies: [] },
+
+    // Rams|2020s TE, OL
+    { name: 'Tyler Higbee', pos: ['TE'], team: 'Rams', decade: '2020s', rating: 79, stats: { YDS: 495, TD: 3, YPR: '10.8' }, badges: [], synergies: [] },
+    { name: 'Joe Noteboom', pos: ['OL'], team: 'Rams', decade: '2020s', rating: 77, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+
+    // Ravens|2020s EDGE
+    { name: 'Odafe Oweh', pos: ['EDGE'], team: 'Ravens', decade: '2020s', rating: 83, stats: { SACKS: 8, FF: 3 }, badges: [], synergies: [] },
+
+    // Saints|2000s OL
+    { name: 'Jahri Evans', pos: ['OL'], team: 'Saints', decade: '2000s', rating: 90, stats: { AP: 4, PB: 6 }, badges: [], synergies: [] },
+    { name: 'Jon Stinchcomb', pos: ['OL'], team: 'Saints', decade: '2000s', rating: 80, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+    { name: 'Carl Nicks', pos: ['OL'], team: 'Saints', decade: '2000s', rating: 85, stats: { AP: 2, PB: 2 }, badges: ['All-Pro'], synergies: [] },
+
+    // Saints|2010s OL
+    { name: 'Terron Armstead', pos: ['OL'], team: 'Saints', decade: '2010s', rating: 88, stats: { AP: 2, PB: 3 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Jahri Evans', pos: ['OL'], team: 'Saints', decade: '2010s', rating: 87, stats: { AP: 2, PB: 6 }, badges: [], synergies: [] },
+
+    // Seahawks|1980s TE, OL
+    { name: 'Charle Young', pos: ['TE'], team: 'Seahawks', decade: '1980s', rating: 78, stats: { YDS: 412, TD: 3, YPR: '11.8' }, badges: [], synergies: [] },
+    { name: 'Bryan Millard', pos: ['OL'], team: 'Seahawks', decade: '1980s', rating: 80, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+
+    // Seahawks|2000s TE, EDGE
+    { name: 'Jerramy Stevens', pos: ['TE'], team: 'Seahawks', decade: '2000s', rating: 77, stats: { YDS: 482, TD: 5, YPR: '11.5' }, badges: [], synergies: [] },
+    { name: 'Patrick Kerney', pos: ['EDGE'], team: 'Seahawks', decade: '2000s', rating: 84, stats: { SACKS: 14.5, FF: 4 }, badges: [], synergies: [] },
+
+    // Seahawks|2010s TE, OL
+    { name: 'Jimmy Graham', pos: ['TE'], team: 'Seahawks', decade: '2010s', rating: 83, stats: { YDS: 923, TD: 10, YPR: '12.8' }, badges: [], synergies: [] },
+    { name: 'Russell Okung', pos: ['OL'], team: 'Seahawks', decade: '2010s', rating: 84, stats: { AP: 1, PB: 2 }, badges: [], synergies: [] },
+    { name: 'Duane Brown', pos: ['OL'], team: 'Seahawks', decade: '2010s', rating: 83, stats: { AP: 0, PB: 3 }, badges: [], synergies: [] },
+
+    // Seahawks|2020s TE, OL, EDGE
+    { name: 'Noah Fant', pos: ['TE'], team: 'Seahawks', decade: '2020s', rating: 78, stats: { YDS: 485, TD: 3, YPR: '10.8' }, badges: [], synergies: [] },
+    { name: 'Charles Cross', pos: ['OL'], team: 'Seahawks', decade: '2020s', rating: 79, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+    { name: 'Uchenna Nwosu', pos: ['EDGE'], team: 'Seahawks', decade: '2020s', rating: 82, stats: { SACKS: 9.5, FF: 2 }, badges: [], synergies: [] },
+
+    // Steelers|1970s TE
+    { name: 'Randy Grossman', pos: ['TE'], team: 'Steelers', decade: '1970s', rating: 76, stats: { YDS: 348, TD: 3, YPR: '11.6' }, badges: [], synergies: [] },
+
+    // Steelers|1990s TE
+    { name: 'Eric Green', pos: ['TE'], team: 'Steelers', decade: '1990s', rating: 82, stats: { YDS: 681, TD: 7, YPR: '12.5' }, badges: [], synergies: [] },
+
+    // Steelers|2010s TE, OL
+    { name: 'Vance McDonald', pos: ['TE'], team: 'Steelers', decade: '2010s', rating: 78, stats: { YDS: 510, TD: 4, YPR: '11.2' }, badges: [], synergies: [] },
+    { name: 'Maurkice Pouncey', pos: ['OL'], team: 'Steelers', decade: '2010s', rating: 90, stats: { AP: 2, PB: 9 }, badges: [], synergies: [] },
+    { name: 'David DeCastro', pos: ['OL'], team: 'Steelers', decade: '2010s', rating: 88, stats: { AP: 3, PB: 6 }, badges: ['All-Pro'], synergies: [] },
+
+    // Steelers|2020s OL
+    { name: 'Broderick Jones', pos: ['OL'], team: 'Steelers', decade: '2020s', rating: 78, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+    { name: 'Dan Moore', pos: ['OL'], team: 'Steelers', decade: '2020s', rating: 76, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+
+    // Texans|2010s TE, OL
+    { name: 'Owen Daniels', pos: ['TE'], team: 'Texans', decade: '2010s', rating: 80, stats: { YDS: 615, TD: 5, YPR: '11.5' }, badges: [], synergies: [] },
+    { name: 'Duane Brown', pos: ['OL'], team: 'Texans', decade: '2010s', rating: 86, stats: { AP: 1, PB: 3 }, badges: [], synergies: [] },
+
+    // Texans|2020s TE, OL
+    { name: 'Dalton Schultz', pos: ['TE'], team: 'Texans', decade: '2020s', rating: 80, stats: { YDS: 635, TD: 5, YPR: '10.9' }, badges: [], synergies: [] },
+    { name: 'Laremy Tunsil', pos: ['OL'], team: 'Texans', decade: '2020s', rating: 89, stats: { AP: 2, PB: 3 }, badges: ['All-Pro'], synergies: [] },
+
+    // Titans|1980s (Oilers era — full roster)
+    { name: 'Warren Moon', pos: ['QB'], team: 'Titans', decade: '1980s', rating: 87, stats: { YDS: 3689, TD: 23, 'CMP%': '58.4' }, badges: ['HOF'], synergies: [] },
+    { name: 'Earl Campbell', pos: ['RB'], team: 'Titans', decade: '1980s', rating: 90, stats: { YDS: 1376, TD: 10, YPC: '4.0' }, badges: ['HOF', 'MVP'], synergies: [] },
+    { name: 'Drew Hill', pos: ['WR1', 'WR2'], team: 'Titans', decade: '1980s', rating: 84, stats: { YDS: 1169, TD: 8, YPR: '16.5' }, badges: [], synergies: [] },
+    { name: 'Ernest Givins', pos: ['WR1', 'WR2'], team: 'Titans', decade: '1980s', rating: 82, stats: { YDS: 970, TD: 6, YPR: '14.2' }, badges: [], synergies: [] },
+    { name: 'Elvin Bethea', pos: ['EDGE'], team: 'Titans', decade: '1980s', rating: 85, stats: { SACKS: '10*', FF: 3 }, badges: ['HOF'], synergies: [] },
+    { name: 'Mike Reinfeldt', pos: ['DB'], team: 'Titans', decade: '1980s', rating: 80, stats: { INT: 6, PD: 10 }, badges: [], synergies: [] },
+    { name: 'Dave Casper', pos: ['TE'], team: 'Titans', decade: '1980s', rating: 81, stats: { YDS: 484, TD: 4, YPR: '12.1' }, badges: ['HOF'], synergies: [] },
+    { name: 'Bruce Matthews', pos: ['OL'], team: 'Titans', decade: '1980s', rating: 88, stats: { AP: 3, PB: 8 }, badges: ['HOF'], synergies: [] },
+
+    // Titans|1990s (full roster)
+    { name: 'Steve McNair', pos: ['QB'], team: 'Titans', decade: '1990s', rating: 85, stats: { YDS: 3228, TD: 19, 'CMP%': '58.5' }, badges: [], synergies: [] },
+    { name: 'Eddie George', pos: ['RB'], team: 'Titans', decade: '1990s', rating: 87, stats: { YDS: 1399, TD: 14, YPC: '3.8' }, badges: [], synergies: [] },
+    { name: 'Derrick Mason', pos: ['WR1', 'WR2'], team: 'Titans', decade: '1990s', rating: 82, stats: { YDS: 1128, TD: 5, YPR: '13.5' }, badges: [], synergies: [] },
+    { name: 'Frank Wycheck', pos: ['TE'], team: 'Titans', decade: '1990s', rating: 81, stats: { YDS: 748, TD: 5, YPR: '11.2' }, badges: [], synergies: [] },
+    { name: 'Jevon Kearse', pos: ['EDGE'], team: 'Titans', decade: '1990s', rating: 89, stats: { SACKS: 14.5, FF: 7 }, badges: [], synergies: [] },
+    { name: 'Blaine Bishop', pos: ['DB'], team: 'Titans', decade: '1990s', rating: 83, stats: { INT: 4, PD: 11 }, badges: [], synergies: [] },
+
+    // Titans|2000s OL
+    { name: 'Brad Hopkins', pos: ['OL'], team: 'Titans', decade: '2000s', rating: 83, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+    { name: 'Benji Olson', pos: ['OL'], team: 'Titans', decade: '2000s', rating: 80, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+    { name: 'Kevin Mawae', pos: ['OL'], team: 'Titans', decade: '2000s', rating: 89, stats: { AP: 3, PB: 8 }, badges: ['HOF'], synergies: [] },
+
+    // Vikings|1970s OL
+    { name: 'Ron Yary', pos: ['OL'], team: 'Vikings', decade: '1970s', rating: 91, stats: { AP: 6, PB: 7 }, badges: ['HOF'], synergies: [] },
+    { name: 'Mick Tingelhoff', pos: ['OL'], team: 'Vikings', decade: '1970s', rating: 89, stats: { AP: 5, PB: 6 }, badges: ['HOF'], synergies: [] },
+    { name: 'Ed White', pos: ['OL'], team: 'Vikings', decade: '1970s', rating: 85, stats: { AP: 2, PB: 4 }, badges: [], synergies: [] },
+
+    // Vikings|1990s TE
+    { name: 'Steve Jordan', pos: ['TE'], team: 'Vikings', decade: '1990s', rating: 82, stats: { YDS: 592, TD: 4, YPR: '11.4' }, badges: [], synergies: [] },
+
+    // Vikings|2000s (full roster — Culpepper/Moss era)
+    { name: 'Daunte Culpepper', pos: ['QB'], team: 'Vikings', decade: '2000s', rating: 85, stats: { YDS: 4717, TD: 39, 'CMP%': '64.2' }, badges: [], synergies: [] },
+    { name: 'Randy Moss', pos: ['WR1', 'WR2'], team: 'Vikings', decade: '2000s', rating: 93, stats: { YDS: 1437, TD: 13, YPR: '17.2' }, badges: ['HOF'], synergies: [] },
+    { name: 'Michael Bennett', pos: ['RB'], team: 'Vikings', decade: '2000s', rating: 78, stats: { YDS: 681, TD: 5, YPC: '3.8' }, badges: [], synergies: [] },
+    { name: 'Nate Burleson', pos: ['WR1', 'WR2'], team: 'Vikings', decade: '2000s', rating: 79, stats: { YDS: 849, TD: 6, YPR: '13.5' }, badges: [], synergies: [] },
+    { name: 'Kevin Williams', pos: ['EDGE'], team: 'Vikings', decade: '2000s', rating: 89, stats: { SACKS: 8.5, FF: 3 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Antoine Winfield', pos: ['DB'], team: 'Vikings', decade: '2000s', rating: 84, stats: { INT: 4, PD: 12 }, badges: [], synergies: [] },
+    { name: 'Jim Kleinsasser', pos: ['TE'], team: 'Vikings', decade: '2000s', rating: 78, stats: { YDS: 418, TD: 3, YPR: '10.5' }, badges: [], synergies: [] },
+    { name: 'Pat Williams', pos: ['EDGE'], team: 'Vikings', decade: '2000s', rating: 84, stats: { SACKS: 4.5, FF: 2 }, badges: [], synergies: [] },
+
+    // Vikings|2010s OL
+    { name: 'Matt Kalil', pos: ['OL'], team: 'Vikings', decade: '2010s', rating: 78, stats: { AP: 0, PB: 1 }, badges: [], synergies: [] },
+    { name: 'Riley Reiff', pos: ['OL'], team: 'Vikings', decade: '2010s', rating: 79, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+    { name: 'Brian O\'Neill', pos: ['OL'], team: 'Vikings', decade: '2010s', rating: 82, stats: { AP: 0, PB: 2 }, badges: [], synergies: [] },
+
+    // Vikings|2020s OL
+    { name: 'Christian Darrisaw', pos: ['OL'], team: 'Vikings', decade: '2020s', rating: 85, stats: { AP: 1, PB: 2 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Garrett Bradbury', pos: ['OL'], team: 'Vikings', decade: '2020s', rating: 78, stats: { AP: 0, PB: 0 }, badges: [], synergies: [] },
+
 ];
 
 const SYNERGIES = {
