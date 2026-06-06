@@ -36,15 +36,14 @@
             <div class="topbar">
                 <div class="topbar-left">
                     <span class="topbar-logo">17–0</span>
-                    <span class="topbar-round" id="topbar-round">Round 1/7</span>
+                    <span class="topbar-round" id="topbar-round">Round 1/8</span>
                 </div>
                 <div class="topbar-center">
                     <span class="pill pill-team" id="pill-team">49ers</span>
                     <span class="pill pill-era" id="pill-era">1980s</span>
                 </div>
                 <div class="topbar-right">
-                    <button class="skip-btn" id="skip-team-btn" onclick="skipTeam()">&#8635; Team <span id="skip-team-n">2</span></button>
-                    <button class="skip-btn" id="skip-era-btn" onclick="skipEra()">&#8635; Era <span id="skip-era-n">2</span></button>
+                    <button class="skip-btn" id="reroll-btn" onclick="useReroll()">&#8635; Reroll <span id="reroll-n">2</span></button>
                     <button class="icon-btn" onclick="openModal('info-modal')" title="Info">i</button>
                 </div>
             </div>
@@ -60,6 +59,7 @@
                             <button class="ftab" data-filter="RB">RB</button>
                             <button class="ftab" data-filter="WR">WR</button>
                             <button class="ftab" data-filter="TE">TE</button>
+                            <button class="ftab" data-filter="OL">OL</button>
                             <button class="ftab" data-filter="EDGE">EDGE</button>
                             <button class="ftab" data-filter="DB">DB</button>
                         </div>
@@ -101,6 +101,10 @@
                             </div>
                             <div class="field-slot" data-pos="TE" id="slot-TE">
                                 <span class="slot-label">TE</span>
+                                <span class="slot-name"></span>
+                            </div>
+                            <div class="field-slot" data-pos="OL" id="slot-OL">
+                                <span class="slot-label">OL</span>
                                 <span class="slot-name"></span>
                             </div>
                             <div class="field-slot" data-pos="EDGE" id="slot-EDGE">

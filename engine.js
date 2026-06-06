@@ -15,7 +15,7 @@ class SimulationEngine {
         let balancePenalty = 0;
 
         // Base ratings
-        const offPositions = ['QB', 'RB', 'WR1', 'WR2', 'TE'];
+        const offPositions = ['QB', 'RB', 'WR1', 'WR2', 'TE', 'OL'];
         const defPositions = ['EDGE', 'DB'];
 
         offPositions.forEach(pos => {
@@ -28,8 +28,8 @@ class SimulationEngine {
             if (player) defenseRating += player.rating;
         });
 
-        // Normalize: offense has 5 players, defense has 2
-        offenseRating = offenseRating / 5;
+        // Normalize: offense has 6 players, defense has 2
+        offenseRating = offenseRating / 6;
         defenseRating = defenseRating / 2;
 
         // Weighted average (offense matters more in modern NFL)

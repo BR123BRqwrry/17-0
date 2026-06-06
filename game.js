@@ -3,7 +3,6 @@ let state = {
     round: 0,
     roster: {},
     usedDecades: [],
-    skips: 2,
     rerolls: 2,
     currentSpin: null,
     selectedPlayer: null,
@@ -11,7 +10,7 @@ let state = {
     hasSpun: false,
 };
 
-const POS_ORDER = ['QB', 'RB', 'WR1', 'WR2', 'TE', 'EDGE', 'DB'];
+const POS_ORDER = ['QB', 'RB', 'WR1', 'WR2', 'TE', 'OL', 'EDGE', 'DB'];
 
 function show(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -24,7 +23,6 @@ function startGame(mode) {
         round: 0,
         roster: {},
         usedDecades: [],
-        skips: 2,
         rerolls: 2,
         currentSpin: null,
         selectedPlayer: null,
@@ -53,11 +51,9 @@ function resetDraft() {
     document.getElementById('player-count').textContent = '';
     document.getElementById('placement-msg').textContent = 'Click a player, then a position';
 
-    // Reset skips
-    document.getElementById('skip-team-btn').disabled = false;
-    document.getElementById('skip-era-btn').disabled = false;
-    document.getElementById('skip-team-n').textContent = '2';
-    document.getElementById('skip-era-n').textContent = '2';
+    // Reset rerolls
+    document.getElementById('reroll-btn').disabled = false;
+    document.getElementById('reroll-n').textContent = '2';
 
     // Reset filters
     document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
@@ -86,19 +82,16 @@ function doSpin() {
     }, 50);
 
     setTimeout(() => {
-        teamEl.textContent = spin.team;
-    }, 600);
-
-    setTimeout(() => {
         clearInterval(cycle);
+        teamEl.textContent = spin.team;
         eraEl.textContent = spin.decade;
         state.spinning = false;
 
         // Hide spin overlay, show players
         document.getElementById('spin-overlay').classList.add('hidden');
         renderPlayers();
-        updateSkipButtons();
-    }, 1000);
+        document.getElementById('reroll-btn').disabled = state.rerolls <= 0;
+    }, 900);
 }
 
 function getAllPlayersForSpin() {
@@ -118,6 +111,7 @@ function renderPlayers() {
     if (filter !== 'All') {
         filtered = filtered.filter(p => {
             if (filter === 'WR') return p.pos.includes('WR1') || p.pos.includes('WR2');
+            if (filter === 'OL') return p.pos.includes('OL');
             return p.pos.includes(filter);
         });
     }
@@ -201,6 +195,8 @@ function getValidSlots(player) {
         if (p === 'WR1' || p === 'WR2') {
             if (!state.roster['WR1']) slots.push('WR1');
             if (!state.roster['WR2']) slots.push('WR2');
+        } else if (p === 'OL') {
+            if (!state.roster['OL']) slots.push('OL');
         } else {
             if (!state.roster[p]) slots.push(p);
         }
@@ -237,14 +233,14 @@ function placePlayer(player, pos) {
     // Remove highlights
     document.querySelectorAll('.field-slot').forEach(s => s.classList.remove('highlight'));
 
-    // Check if done
-    if (state.round >= 7) {
+    // Check if done (8 positions now)
+    if (state.round >= 8) {
         setTimeout(runSim, 500);
         return;
     }
 
     // Update round
-    document.getElementById('topbar-round').textContent = `Round ${state.round + 1}/7`;
+    document.getElementById('topbar-round').textContent = `Round ${state.round + 1}/8`;
 
     // Show spin overlay for next round
     document.getElementById('spin-overlay').classList.remove('hidden');
@@ -267,24 +263,19 @@ function filterPlayers() {
     if (state.hasSpun && state.currentSpin) renderPlayers();
 }
 
-// Skips
-function skipTeam() {
-    if (state.skips <= 0 || state.spinning) return;
-    state.skips--;
-    document.getElementById('skip-team-n').textContent = state.skips;
-    doSpin();
-}
-
-function skipEra() {
+// Reroll (one button, re-spins both team and era)
+function useReroll() {
     if (state.rerolls <= 0 || state.spinning) return;
     state.rerolls--;
-    document.getElementById('skip-era-n').textContent = state.rerolls;
-    doSpin();
-}
-
-function updateSkipButtons() {
-    document.getElementById('skip-team-btn').disabled = state.skips <= 0;
-    document.getElementById('skip-era-btn').disabled = state.rerolls <= 0;
+    document.getElementById('reroll-n').textContent = state.rerolls;
+    if (state.rerolls <= 0) document.getElementById('reroll-btn').disabled = true;
+    // Show spin overlay again
+    document.getElementById('spin-overlay').classList.remove('hidden');
+    document.getElementById('player-list').innerHTML = '';
+    document.getElementById('player-count').textContent = '';
+    state.selectedPlayer = null;
+    document.querySelectorAll('.field-slot').forEach(s => s.classList.remove('highlight'));
+    document.getElementById('placement-msg').textContent = 'Click a player, then a position';
 }
 
 // Simulation

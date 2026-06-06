@@ -84,7 +84,6 @@ const PLAYER_DB = [
     { name: 'Charles Haley', pos: ['EDGE'], team: 'Cowboys', decade: '1990s', rating: 89, stats: { SACKS: 11, FF: 3 }, badges: ['HOF'], synergies: ['Cowboys90s'] },
     { name: 'Jay Novacek', pos: ['TE'], team: 'Cowboys', decade: '1990s', rating: 84, stats: { YDS: 705, TD: 5, YPR: '11.0' }, badges: [], synergies: ['Cowboys90s'] },
     { name: 'Darren Woodson', pos: ['DB'], team: 'Cowboys', decade: '1990s', rating: 87, stats: { INT: 5, PD: 13 }, badges: [], synergies: [] },
-    { name: 'Larry Allen', pos: ['RB'], team: 'Cowboys', decade: '1990s', rating: 85, stats: { YDS: 0, TD: 0, YPC: '0' }, badges: ['HOF'], synergies: [] },
     { name: 'Alvin Harper', pos: ['WR1', 'WR2'], team: 'Cowboys', decade: '1990s', rating: 80, stats: { YDS: 892, TD: 6, YPR: '18.2' }, badges: [], synergies: [] },
 
     { name: 'Dak Prescott', pos: ['QB'], team: 'Cowboys', decade: '2020s', rating: 87, stats: { YDS: 4516, TD: 36, 'CMP%': '69.5' }, badges: [], synergies: [] },
@@ -293,7 +292,6 @@ const PLAYER_DB = [
     { name: 'Dan Marino', pos: ['QB'], team: 'Dolphins', decade: '1980s', rating: 96, stats: { YDS: 4746, TD: 38, 'CMP%': '59.3' }, badges: ['HOF', 'MVP'], synergies: [] },
     { name: 'Mark Clayton', pos: ['WR1', 'WR2'], team: 'Dolphins', decade: '1980s', rating: 85, stats: { YDS: 1150, TD: 12, YPR: '16.0' }, badges: [], synergies: [] },
     { name: 'Mark Duper', pos: ['WR1', 'WR2'], team: 'Dolphins', decade: '1980s', rating: 84, stats: { YDS: 1092, TD: 8, YPR: '18.5' }, badges: [], synergies: [] },
-    { name: 'Dwight Stephenson', pos: ['RB'], team: 'Dolphins', decade: '1980s', rating: 80, stats: { YDS: 0, TD: 0, YPC: '0' }, badges: ['HOF'], synergies: [] },
     { name: 'Bob Baumhower', pos: ['EDGE'], team: 'Dolphins', decade: '1980s', rating: 82, stats: { SACKS: 7, FF: 2 }, badges: [], synergies: [] },
     { name: 'Glenn Blackwood', pos: ['DB'], team: 'Dolphins', decade: '1980s', rating: 80, stats: { INT: 5, PD: 10 }, badges: [], synergies: [] },
 
@@ -617,6 +615,58 @@ const PLAYER_DB = [
     { name: 'Brad Johnson', pos: ['QB'], team: 'Buccaneers', decade: '2000s', rating: 79, stats: { YDS: 3049, TD: 22, 'CMP%': '62.3' }, badges: [], synergies: [] },
     { name: 'Mike Alstott', pos: ['RB'], team: 'Buccaneers', decade: '2000s', rating: 82, stats: { YDS: 627, TD: 8, YPC: '3.7' }, badges: [], synergies: [] },
     { name: 'Lee Roy Selmon', pos: ['EDGE'], team: 'Buccaneers', decade: '1980s', rating: 89, stats: { SACKS: 11, FF: 3 }, badges: ['HOF', 'DPOY'], synergies: [] },
+
+    // ============ OFFENSIVE LINEMEN ============
+    // 1960s
+    { name: 'Jim Parker', pos: ['OL'], team: 'Colts', decade: '1960s', rating: 94, stats: { 'AP': 8, 'PB': 8 }, badges: ['HOF'], synergies: [] },
+    { name: 'Forrest Gregg', pos: ['OL'], team: 'Packers', decade: '1960s', rating: 93, stats: { 'AP': 7, 'PB': 9 }, badges: ['HOF'], synergies: [] },
+    { name: 'Jim Otto', pos: ['OL'], team: 'Raiders', decade: '1960s', rating: 91, stats: { 'AP': 6, 'PB': 12 }, badges: ['HOF'], synergies: [] },
+    { name: 'Bob Brown', pos: ['OL'], team: 'Eagles', decade: '1960s', rating: 89, stats: { 'AP': 5, 'PB': 6 }, badges: ['HOF'], synergies: [] },
+    { name: 'Roosevelt Brown', pos: ['OL'], team: 'Giants', decade: '1960s', rating: 90, stats: { 'AP': 6, 'PB': 9 }, badges: ['HOF'], synergies: [] },
+    // 1970s
+    { name: 'Art Shell', pos: ['OL'], team: 'Raiders', decade: '1970s', rating: 92, stats: { 'AP': 5, 'PB': 8 }, badges: ['HOF'], synergies: [] },
+    { name: 'Mike Webster', pos: ['OL'], team: 'Steelers', decade: '1970s', rating: 93, stats: { 'AP': 5, 'PB': 9 }, badges: ['HOF'], synergies: ['Steelers70s'] },
+    { name: 'Joe DeLamielleure', pos: ['OL'], team: 'Bills', decade: '1970s', rating: 88, stats: { 'AP': 4, 'PB': 6 }, badges: ['HOF'], synergies: [] },
+    { name: 'John Hannah', pos: ['OL'], team: 'Patriots', decade: '1970s', rating: 95, stats: { 'AP': 7, 'PB': 9 }, badges: ['HOF'], synergies: [] },
+    { name: 'Gene Upshaw', pos: ['OL'], team: 'Raiders', decade: '1970s', rating: 90, stats: { 'AP': 5, 'PB': 7 }, badges: ['HOF'], synergies: [] },
+    { name: 'Rayfield Wright', pos: ['OL'], team: 'Cowboys', decade: '1970s', rating: 89, stats: { 'AP': 4, 'PB': 6 }, badges: ['HOF'], synergies: [] },
+    // 1980s
+    { name: 'Anthony Munoz', pos: ['OL'], team: 'Bengals', decade: '1980s', rating: 97, stats: { 'AP': 9, 'PB': 11 }, badges: ['HOF'], synergies: [] },
+    { name: 'Joe Jacoby', pos: ['OL'], team: 'Commanders', decade: '1980s', rating: 87, stats: { 'AP': 3, 'PB': 4 }, badges: [], synergies: [] },
+    { name: 'Mike Munchak', pos: ['OL'], team: 'Titans', decade: '1980s', rating: 89, stats: { 'AP': 4, 'PB': 9 }, badges: ['HOF'], synergies: [] },
+    { name: 'Dwight Stephenson', pos: ['OL'], team: 'Dolphins', decade: '1980s', rating: 92, stats: { 'AP': 5, 'PB': 5 }, badges: ['HOF'], synergies: [] },
+    { name: 'Jim Covert', pos: ['OL'], team: 'Bears', decade: '1980s', rating: 87, stats: { 'AP': 2, 'PB': 2 }, badges: ['HOF'], synergies: [] },
+    // 1990s
+    { name: 'Larry Allen', pos: ['OL'], team: 'Cowboys', decade: '1990s', rating: 96, stats: { 'AP': 7, 'PB': 11 }, badges: ['HOF'], synergies: ['Cowboys90s'] },
+    { name: 'Bruce Matthews', pos: ['OL'], team: 'Titans', decade: '1990s', rating: 94, stats: { 'AP': 6, 'PB': 14 }, badges: ['HOF'], synergies: [] },
+    { name: 'Jonathan Ogden', pos: ['OL'], team: 'Ravens', decade: '1990s', rating: 93, stats: { 'AP': 6, 'PB': 11 }, badges: ['HOF'], synergies: [] },
+    { name: 'Randall McDaniel', pos: ['OL'], team: 'Vikings', decade: '1990s', rating: 92, stats: { 'AP': 6, 'PB': 12 }, badges: ['HOF'], synergies: [] },
+    { name: 'Willie Roaf', pos: ['OL'], team: 'Saints', decade: '1990s', rating: 91, stats: { 'AP': 5, 'PB': 11 }, badges: ['HOF'], synergies: [] },
+    { name: 'Steve Wisniewski', pos: ['OL'], team: 'Raiders', decade: '1990s', rating: 86, stats: { 'AP': 2, 'PB': 8 }, badges: [], synergies: [] },
+    // 2000s
+    { name: 'Walter Jones', pos: ['OL'], team: 'Seahawks', decade: '2000s', rating: 96, stats: { 'AP': 6, 'PB': 9 }, badges: ['HOF'], synergies: [] },
+    { name: 'Orlando Pace', pos: ['OL'], team: 'Rams', decade: '2000s', rating: 92, stats: { 'AP': 3, 'PB': 7 }, badges: ['HOF'], synergies: [] },
+    { name: 'Alan Faneca', pos: ['OL'], team: 'Steelers', decade: '2000s', rating: 91, stats: { 'AP': 6, 'PB': 9 }, badges: ['HOF'], synergies: [] },
+    { name: 'Steve Hutchinson', pos: ['OL'], team: 'Vikings', decade: '2000s', rating: 90, stats: { 'AP': 5, 'PB': 7 }, badges: ['HOF'], synergies: [] },
+    { name: 'Jeff Saturday', pos: ['OL'], team: 'Colts', decade: '2000s', rating: 88, stats: { 'AP': 3, 'PB': 5 }, badges: [], synergies: [] },
+    { name: 'Kevin Mawae', pos: ['OL'], team: 'Jets', decade: '2000s', rating: 89, stats: { 'AP': 3, 'PB': 8 }, badges: ['HOF'], synergies: [] },
+    // 2010s
+    { name: 'Jason Kelce', pos: ['OL'], team: 'Eagles', decade: '2010s', rating: 94, stats: { 'AP': 6, 'PB': 7 }, badges: ['HOF'], synergies: [] },
+    { name: 'Zack Martin', pos: ['OL'], team: 'Cowboys', decade: '2010s', rating: 94, stats: { 'AP': 6, 'PB': 7 }, badges: [], synergies: [] },
+    { name: 'Marshal Yanda', pos: ['OL'], team: 'Ravens', decade: '2010s', rating: 93, stats: { 'AP': 5, 'PB': 8 }, badges: ['HOF'], synergies: [] },
+    { name: 'Trent Williams', pos: ['OL'], team: 'Commanders', decade: '2010s', rating: 93, stats: { 'AP': 5, 'PB': 9 }, badges: [], synergies: [] },
+    { name: 'Joe Thomas', pos: ['OL'], team: 'Browns', decade: '2010s', rating: 95, stats: { 'AP': 6, 'PB': 10 }, badges: ['HOF'], synergies: [] },
+    { name: 'Tyron Smith', pos: ['OL'], team: 'Cowboys', decade: '2010s', rating: 90, stats: { 'AP': 4, 'PB': 8 }, badges: [], synergies: [] },
+    { name: 'David Bakhtiari', pos: ['OL'], team: 'Packers', decade: '2010s', rating: 89, stats: { 'AP': 3, 'PB': 4 }, badges: ['All-Pro'], synergies: [] },
+    // 2020s
+    { name: 'Trent Williams', pos: ['OL'], team: '49ers', decade: '2020s', rating: 95, stats: { 'AP': 4, 'PB': 6 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Penei Sewell', pos: ['OL'], team: 'Lions', decade: '2020s', rating: 92, stats: { 'AP': 3, 'PB': 3 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Rashawn Slater', pos: ['OL'], team: 'Chargers', decade: '2020s', rating: 89, stats: { 'AP': 2, 'PB': 3 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Landon Dickerson', pos: ['OL'], team: 'Eagles', decade: '2020s', rating: 88, stats: { 'AP': 2, 'PB': 2 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Tristan Wirfs', pos: ['OL'], team: 'Buccaneers', decade: '2020s', rating: 91, stats: { 'AP': 3, 'PB': 3 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Quenton Nelson', pos: ['OL'], team: 'Colts', decade: '2020s', rating: 90, stats: { 'AP': 4, 'PB': 4 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Frank Ragnow', pos: ['OL'], team: 'Lions', decade: '2020s', rating: 88, stats: { 'AP': 2, 'PB': 3 }, badges: ['All-Pro'], synergies: [] },
+    { name: 'Creed Humphrey', pos: ['OL'], team: 'Chiefs', decade: '2020s', rating: 89, stats: { 'AP': 3, 'PB': 3 }, badges: ['All-Pro'], synergies: [] },
 ];
 
 const SYNERGIES = {
