@@ -6,17 +6,18 @@ let state = {
     skips: 2,
     rerolls: 2,
     currentSpin: null,
+    selectedPlayer: null,
     spinning: false,
-    posOrder: ['QB', 'RB', 'WR1', 'WR2', 'TE', 'EDGE', 'DB'],
+    hasSpun: false,
 };
 
-// Screens
+const POS_ORDER = ['QB', 'RB', 'WR1', 'WR2', 'TE', 'EDGE', 'DB'];
+
 function show(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
 
-// Landing
 function startGame(mode) {
     state = {
         mode,
@@ -26,206 +27,269 @@ function startGame(mode) {
         skips: 2,
         rerolls: 2,
         currentSpin: null,
+        selectedPlayer: null,
         spinning: false,
-        posOrder: ['QB', 'RB', 'WR1', 'WR2', 'TE', 'EDGE', 'DB'],
+        hasSpun: false,
     };
     show('draft-screen');
-    resetDraftUI();
+    resetDraft();
 }
 
-function resetDraftUI() {
-    // Reset mini slots
-    document.querySelectorAll('.mini-slot').forEach((s, i) => {
-        s.classList.remove('filled', 'active');
-        if (i === 0) s.classList.add('active');
+function resetDraft() {
+    // Reset pills to default
+    document.getElementById('pill-team').textContent = '49ers';
+    document.getElementById('pill-era').textContent = '1980s';
+    document.getElementById('topbar-round').textContent = 'Round 1/7';
+
+    // Reset field slots
+    document.querySelectorAll('.field-slot').forEach(s => {
+        s.classList.remove('filled', 'highlight');
+        s.querySelector('.slot-name').textContent = '';
     });
 
-    // Reset spin display to default (49ers x 1980s)
-    document.getElementById('franchise-val').textContent = '49ers';
-    document.getElementById('decade-val').textContent = '1980s';
-    document.getElementById('franchise-val').classList.remove('landed', 'spinning');
-    document.getElementById('decade-val').classList.remove('landed', 'spinning');
+    // Show spin overlay, hide player list
+    document.getElementById('spin-overlay').classList.remove('hidden');
+    document.getElementById('player-list').innerHTML = '';
+    document.getElementById('player-count').textContent = '';
+    document.getElementById('placement-msg').textContent = 'Click a player, then a position';
 
-    // Reset buttons
-    document.getElementById('skip-btn').disabled = true;
-    document.getElementById('reroll-btn').disabled = true;
-    document.getElementById('spin-btn').disabled = false;
-    document.getElementById('skip-count').textContent = '2';
-    document.getElementById('reroll-count').textContent = '2';
+    // Reset skips
+    document.getElementById('skip-team-btn').disabled = false;
+    document.getElementById('skip-era-btn').disabled = false;
+    document.getElementById('skip-team-n').textContent = '2';
+    document.getElementById('skip-era-n').textContent = '2';
 
-    // Hide picks
-    document.getElementById('picks-zone').classList.remove('visible');
-
-    // Show spin zone
-    document.getElementById('spin-zone').style.display = '';
+    // Reset filters
+    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+    document.querySelector('.ftab[data-filter="All"]').classList.add('active');
+    document.getElementById('search-input').value = '';
 }
 
 // Spin
 function doSpin() {
     if (state.spinning) return;
     state.spinning = true;
+    state.hasSpun = true;
 
-    const pos = state.posOrder[state.round];
-    const spin = getRandomTeamForPosition(pos, state.usedDecades);
-    if (!spin) return;
-
+    const spin = getRandomTeamForPosition('ALL', state.usedDecades);
+    if (!spin) { state.spinning = false; return; }
     state.currentSpin = spin;
 
-    // Hide picks from previous round
-    document.getElementById('picks-zone').classList.remove('visible');
+    const teamEl = document.getElementById('pill-team');
+    const eraEl = document.getElementById('pill-era');
 
-    // Disable spin button during animation
-    document.getElementById('spin-btn').disabled = true;
-
-    const franchiseEl = document.getElementById('franchise-val');
-    const decadeEl = document.getElementById('decade-val');
-
-    franchiseEl.classList.remove('landed');
-    decadeEl.classList.remove('landed');
-    franchiseEl.classList.add('spinning');
-    decadeEl.classList.add('spinning');
-
-    // Rapid cycling
     let count = 0;
     const cycle = setInterval(() => {
-        franchiseEl.textContent = TEAMS[Math.floor(Math.random() * TEAMS.length)];
-        decadeEl.textContent = DECADES[Math.floor(Math.random() * DECADES.length)];
+        teamEl.textContent = TEAMS[Math.floor(Math.random() * TEAMS.length)];
+        eraEl.textContent = DECADES[Math.floor(Math.random() * DECADES.length)];
         count++;
     }, 50);
 
-    // Land franchise
     setTimeout(() => {
-        franchiseEl.classList.remove('spinning');
-        franchiseEl.classList.add('landed');
-        franchiseEl.textContent = spin.team;
-    }, 700);
+        teamEl.textContent = spin.team;
+    }, 600);
 
-    // Land decade
     setTimeout(() => {
         clearInterval(cycle);
-        decadeEl.classList.remove('spinning');
-        decadeEl.classList.add('landed');
-        decadeEl.textContent = spin.decade;
-
+        eraEl.textContent = spin.decade;
         state.spinning = false;
 
-        // Enable skip/reroll
-        document.getElementById('skip-btn').disabled = state.skips <= 0;
-        document.getElementById('reroll-btn').disabled = state.rerolls <= 0;
-
-        // Show picks after short delay
-        setTimeout(() => showPicks(spin, pos), 250);
-    }, 1100);
+        // Hide spin overlay, show players
+        document.getElementById('spin-overlay').classList.add('hidden');
+        renderPlayers();
+        updateSkipButtons();
+    }, 1000);
 }
 
-function showPicks(spin, position) {
-    const zone = document.getElementById('picks-zone');
-    const list = document.getElementById('picks-list');
-    const posLabel = document.getElementById('picks-pos');
-    const eraLabel = document.getElementById('picks-era');
+function getAllPlayersForSpin() {
+    if (!state.currentSpin) return [];
+    const { team, decade } = state.currentSpin;
+    return PLAYER_DB.filter(p => p.team === team && p.decade === decade);
+}
 
-    const displayPos = position === 'WR1' || position === 'WR2' ? 'WR' : position;
-    posLabel.textContent = `PICK ${state.round + 1}/7 — ${displayPos}`;
-    eraLabel.textContent = `${spin.decade}`;
+function renderPlayers() {
+    const players = getAllPlayersForSpin();
+    const filter = document.querySelector('.ftab.active')?.dataset.filter || 'All';
+    const search = document.getElementById('search-input').value.toLowerCase();
+    const sort = document.getElementById('sort-select').value;
 
+    let filtered = players;
+
+    if (filter !== 'All') {
+        filtered = filtered.filter(p => {
+            if (filter === 'WR') return p.pos.includes('WR1') || p.pos.includes('WR2');
+            return p.pos.includes(filter);
+        });
+    }
+
+    if (search) {
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
+    }
+
+    if (sort === 'rating') {
+        filtered.sort((a, b) => b.rating - a.rating);
+    } else {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    document.getElementById('player-count').textContent = `${filtered.length} players available`;
+
+    const list = document.getElementById('player-list');
     list.innerHTML = '';
 
-    const players = [...spin.players].sort(() => Math.random() - 0.5).slice(0, 5);
+    filtered.forEach(player => {
+        const row = document.createElement('div');
+        row.className = 'p-row';
+        row.onclick = () => selectPlayer(player, row);
 
-    players.forEach(player => {
-        const card = document.createElement('div');
-        card.className = 'pick-card';
-        card.onclick = () => pickPlayer(player, position, spin.decade);
+        const posLabel = player.pos.map(p => p.replace('1', '').replace('2', '')).filter((v, i, a) => a.indexOf(v) === i).join(' · ');
 
         let statsHtml = '';
         if (state.mode === 'classic') {
             const entries = Object.entries(player.stats);
-            statsHtml = `<div class="pick-stats">${entries.map(([k, v]) => `${k}: ${v}`).join(' · ')}</div>`;
+            statsHtml = `<div class="p-stats">${entries.map(([k, v]) =>
+                `<div class="p-stat"><span class="p-stat-val">${v}</span><span class="p-stat-label">${k}</span></div>`
+            ).join('')}</div>`;
         }
 
         let badgesHtml = '';
         if (player.badges.length > 0) {
-            badgesHtml = `<div class="pick-right">${player.badges.map(b => {
-                let cls = 'badge-ap';
-                if (b === 'HOF') cls = 'badge-hof';
-                else if (b === 'MVP' || b === 'SB MVP') cls = 'badge-mvp';
-                else if (b === 'DPOY') cls = 'badge-dpoy';
+            badgesHtml = `<div class="p-badges">${player.badges.map(b => {
+                let cls = 'b-ap';
+                if (b === 'HOF') cls = 'b-hof';
+                else if (b === 'MVP' || b === 'SB MVP') cls = 'b-mvp';
+                else if (b === 'DPOY') cls = 'b-dpoy';
                 return `<span class="badge ${cls}">${b}</span>`;
             }).join('')}</div>`;
         }
 
-        card.innerHTML = `
-            <div class="pick-left">
-                <span class="pick-name">${player.name}</span>
-                <span class="pick-team">${player.team}</span>
-                ${statsHtml}
+        row.innerHTML = `
+            <div class="p-info">
+                <span class="p-name">${player.name}</span>
+                <span class="p-meta">${posLabel} · ${state.currentSpin.team} · ${state.currentSpin.decade}</span>
+                ${badgesHtml}
             </div>
-            ${badgesHtml}
+            ${statsHtml}
         `;
 
-        list.appendChild(card);
+        list.appendChild(row);
     });
-
-    zone.classList.add('visible');
 }
 
-function pickPlayer(player, position, decade) {
-    state.roster[position] = player;
-    state.usedDecades.push(decade);
+function selectPlayer(player, rowEl) {
+    state.selectedPlayer = player;
 
-    // Update mini slot
-    const slots = document.querySelectorAll('.mini-slot');
-    slots[state.round].classList.remove('active');
-    slots[state.round].classList.add('filled');
+    // Highlight row
+    document.querySelectorAll('.p-row').forEach(r => r.classList.remove('selected'));
+    rowEl.classList.add('selected');
 
+    // Highlight valid field slots
+    const validSlots = getValidSlots(player);
+    document.querySelectorAll('.field-slot').forEach(s => {
+        s.classList.remove('highlight');
+        if (validSlots.includes(s.dataset.pos) && !s.classList.contains('filled')) {
+            s.classList.add('highlight');
+        }
+    });
+
+    document.getElementById('placement-msg').textContent = `Placing: ${player.name} — click a field position`;
+}
+
+function getValidSlots(player) {
+    const slots = [];
+    player.pos.forEach(p => {
+        if (p === 'WR1' || p === 'WR2') {
+            if (!state.roster['WR1']) slots.push('WR1');
+            if (!state.roster['WR2']) slots.push('WR2');
+        } else {
+            if (!state.roster[p]) slots.push(p);
+        }
+    });
+    return [...new Set(slots)];
+}
+
+// Field slot click
+document.addEventListener('click', (e) => {
+    const slot = e.target.closest('.field-slot');
+    if (!slot) return;
+    if (slot.classList.contains('filled')) return;
+    if (!state.selectedPlayer) return;
+
+    const pos = slot.dataset.pos;
+    const validSlots = getValidSlots(state.selectedPlayer);
+    if (!validSlots.includes(pos)) return;
+
+    placePlayer(state.selectedPlayer, pos);
+});
+
+function placePlayer(player, pos) {
+    state.roster[pos] = player;
+    state.usedDecades.push(state.currentSpin.decade);
     state.round++;
+    state.selectedPlayer = null;
 
+    // Update slot
+    const slot = document.getElementById(`slot-${pos}`);
+    slot.classList.add('filled');
+    slot.classList.remove('highlight');
+    slot.querySelector('.slot-name').textContent = player.name;
+
+    // Remove highlights
+    document.querySelectorAll('.field-slot').forEach(s => s.classList.remove('highlight'));
+
+    // Check if done
     if (state.round >= 7) {
-        // All picks done — simulate
-        setTimeout(runSim, 400);
+        setTimeout(runSim, 500);
         return;
     }
 
-    // Mark next slot active
-    slots[state.round].classList.add('active');
+    // Update round
+    document.getElementById('topbar-round').textContent = `Round ${state.round + 1}/7`;
 
-    // Hide picks, show spin button for next round
-    document.getElementById('picks-zone').classList.remove('visible');
-    document.getElementById('spin-btn').disabled = false;
-    document.getElementById('skip-btn').disabled = true;
-    document.getElementById('reroll-btn').disabled = true;
-
-    // Reset spin display
-    document.getElementById('franchise-val').classList.remove('landed');
-    document.getElementById('decade-val').classList.remove('landed');
+    // Show spin overlay for next round
+    document.getElementById('spin-overlay').classList.remove('hidden');
+    document.getElementById('player-list').innerHTML = '';
+    document.getElementById('player-count').textContent = '';
+    document.getElementById('placement-msg').textContent = 'Click a player, then a position';
+    document.getElementById('search-input').value = '';
 }
 
-// Skips and rerolls
-function useSkip() {
-    if (state.skips <= 0 || state.spinning || !state.currentSpin) return;
+// Filter tabs
+document.getElementById('filter-tabs').addEventListener('click', (e) => {
+    const tab = e.target.closest('.ftab');
+    if (!tab) return;
+    document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    if (state.hasSpun && state.currentSpin) renderPlayers();
+});
+
+function filterPlayers() {
+    if (state.hasSpun && state.currentSpin) renderPlayers();
+}
+
+// Skips
+function skipTeam() {
+    if (state.skips <= 0 || state.spinning) return;
     state.skips--;
-    document.getElementById('skip-count').textContent = state.skips;
-    document.getElementById('picks-zone').classList.remove('visible');
-    document.getElementById('spin-btn').disabled = false;
-    document.getElementById('skip-btn').disabled = true;
-    document.getElementById('reroll-btn').disabled = true;
-    document.getElementById('franchise-val').classList.remove('landed');
-    document.getElementById('decade-val').classList.remove('landed');
+    document.getElementById('skip-team-n').textContent = state.skips;
+    doSpin();
 }
 
-function useReroll() {
-    if (state.rerolls <= 0 || state.spinning || !state.currentSpin) return;
+function skipEra() {
+    if (state.rerolls <= 0 || state.spinning) return;
     state.rerolls--;
-    document.getElementById('reroll-count').textContent = state.rerolls;
-    document.getElementById('picks-zone').classList.remove('visible');
-    // Auto-spin again
+    document.getElementById('skip-era-n').textContent = state.rerolls;
     doSpin();
+}
+
+function updateSkipButtons() {
+    document.getElementById('skip-team-btn').disabled = state.skips <= 0;
+    document.getElementById('skip-era-btn').disabled = state.rerolls <= 0;
 }
 
 // Simulation
 function runSim() {
     show('sim-screen');
-
     const engine = new SimulationEngine(state.roster);
     const result = engine.simulateSeason();
 
@@ -236,199 +300,95 @@ function runSim() {
 
     result.weeks.forEach((w, i) => {
         const el = document.createElement('div');
-        el.className = 'sim-week';
+        el.className = 'sim-wk';
         el.textContent = `W${i + 1} ${w}`;
         grid.appendChild(el);
     });
 
     let idx = 0;
     const interval = setInterval(() => {
-        if (idx >= 17) {
-            clearInterval(interval);
-            setTimeout(() => showResults(result), 600);
-            return;
-        }
-        const el = grid.children[idx];
-        el.classList.add('show', result.weeks[idx]);
+        if (idx >= 17) { clearInterval(interval); setTimeout(() => showResults(result), 500); return; }
+        grid.children[idx].classList.add('show', result.weeks[idx]);
         bar.style.width = `${((idx + 1) / 17) * 100}%`;
         idx++;
-    }, 130);
+    }, 120);
 }
 
 function showResults(result) {
     show('results-screen');
+    const rec = document.getElementById('result-record');
+    document.getElementById('rr-w').textContent = result.wins;
+    document.getElementById('rr-l').textContent = result.losses;
 
-    const record = document.getElementById('result-record');
-    document.getElementById('rr-wins').textContent = result.wins;
-    document.getElementById('rr-losses').textContent = result.losses;
+    rec.classList.remove('perfect');
+    if (result.wins === 17) { rec.classList.add('perfect'); document.getElementById('result-sub').textContent = 'PERFECT SEASON'; launchConfetti(); }
+    else if (result.wins >= 15) document.getElementById('result-sub').textContent = 'ELITE SEASON';
+    else if (result.wins >= 12) document.getElementById('result-sub').textContent = 'PLAYOFF TEAM';
+    else if (result.wins >= 9) document.getElementById('result-sub').textContent = 'MIDDLE OF THE PACK';
+    else document.getElementById('result-sub').textContent = 'REBUILD MODE';
 
-    record.classList.remove('perfect');
-    if (result.wins === 17) {
-        record.classList.add('perfect');
-        document.getElementById('result-label').textContent = 'PERFECT SEASON';
-        launchConfetti();
-    } else if (result.wins >= 15) {
-        document.getElementById('result-label').textContent = 'ELITE SEASON';
-    } else if (result.wins >= 12) {
-        document.getElementById('result-label').textContent = 'PLAYOFF TEAM';
-    } else if (result.wins >= 9) {
-        document.getElementById('result-label').textContent = 'MIDDLE OF THE PACK';
-    } else {
-        document.getElementById('result-label').textContent = 'REBUILD MODE';
-    }
-
-    // Roster
-    const rosterEl = document.getElementById('result-roster');
-    rosterEl.innerHTML = '';
-    state.posOrder.forEach(pos => {
+    const roster = document.getElementById('result-roster');
+    roster.innerHTML = '';
+    POS_ORDER.forEach(pos => {
         const p = state.roster[pos];
         if (!p) return;
-        const displayPos = pos === 'WR1' || pos === 'WR2' ? 'WR' : pos;
-        const item = document.createElement('div');
-        item.className = 'rr-item';
-        item.innerHTML = `
-            <span class="rr-pos">${displayPos}</span>
-            <span class="rr-name">${p.name}</span>
-            <span class="rr-meta">${p.decade} ${p.team}</span>
-        `;
-        rosterEl.appendChild(item);
+        const dp = pos.replace('1', '').replace('2', '');
+        roster.innerHTML += `<div class="rr-item"><span class="rr-pos">${dp}</span><span class="rr-name">${p.name}</span><span class="rr-meta">${state.usedDecades[POS_ORDER.indexOf(pos)]} ${p.team}</span></div>`;
     });
 
-    // Bonuses
-    const bonusEl = document.getElementById('result-bonuses');
-    bonusEl.innerHTML = '';
-    result.synergies.forEach(s => {
-        const el = document.createElement('div');
-        el.className = 'bonus-line';
-        el.textContent = `+ ${s.label} (${s.bonus})`;
-        bonusEl.appendChild(el);
-    });
-    result.penalties.forEach(p => {
-        const el = document.createElement('div');
-        el.className = 'bonus-line neg';
-        el.textContent = `${p.label} (${p.value})`;
-        bonusEl.appendChild(el);
-    });
+    const bonuses = document.getElementById('result-bonuses');
+    bonuses.innerHTML = '';
+    result.synergies.forEach(s => { bonuses.innerHTML += `<div class="bonus-line">+ ${s.label} (${s.bonus})</div>`; });
+    result.penalties.forEach(p => { bonuses.innerHTML += `<div class="bonus-line neg">${p.label} (${p.value})</div>`; });
 }
 
-// Share
 function shareResults() {
     let text = '17–0\n\n';
-    state.posOrder.forEach(pos => {
+    POS_ORDER.forEach((pos, i) => {
         const p = state.roster[pos];
         if (!p) return;
-        const dp = pos === 'WR1' || pos === 'WR2' ? 'WR' : pos;
-        text += `${dp}: ${p.name} (${p.decade} ${p.team})\n`;
+        const dp = pos.replace('1', '').replace('2', '');
+        text += `${dp}: ${p.name} (${state.usedDecades[i]} ${p.team})\n`;
     });
-    const w = document.getElementById('rr-wins').textContent;
-    const l = document.getElementById('rr-losses').textContent;
-    text += `\n${w}–${l}\n\nCan you go 17-0? 17-0game.com`;
+    text += `\n${document.getElementById('rr-w').textContent}–${document.getElementById('rr-l').textContent}\n\nCan you go 17-0? 17-0game.com`;
 
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard'));
-    } else {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        toast('Copied to clipboard');
-    }
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard'));
+    else { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); toast('Copied to clipboard'); }
 }
 
 function toast(msg) {
     let el = document.querySelector('.toast');
-    if (!el) {
-        el = document.createElement('div');
-        el.className = 'toast';
-        document.body.appendChild(el);
-    }
-    el.textContent = msg;
-    el.classList.add('show');
+    if (!el) { el = document.createElement('div'); el.className = 'toast'; document.body.appendChild(el); }
+    el.textContent = msg; el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), 2500);
 }
 
-function playAgain() {
-    show('landing-screen');
-}
+function playAgain() { show('landing-screen'); }
 
 // Modals
-function showInfo() {
-    document.getElementById('info-modal').classList.add('active');
-}
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-function closeInfoModal() {
-    document.getElementById('info-modal').classList.remove('active');
-}
-
-function showRules() {
-    document.getElementById('rules-modal').classList.add('active');
-}
-
-function closeRulesModal() {
-    document.getElementById('rules-modal').classList.remove('active');
-}
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+    }
+});
 
 // Confetti
 function launchConfetti() {
-    const canvas = document.getElementById('confetti-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const particles = [];
-    const colors = ['#ff4136', '#ffdc00', '#2ecc40', '#7fdbff', '#ff851b', '#ffffff'];
-
-    for (let i = 0; i < 180; i++) {
-        particles.push({
-            x: Math.random() * canvas.width,
-            y: -20 - Math.random() * 300,
-            w: Math.random() * 8 + 4,
-            h: Math.random() * 5 + 2,
-            color: colors[Math.floor(Math.random() * colors.length)],
-            vx: (Math.random() - 0.5) * 3,
-            vy: Math.random() * 3 + 1.5,
-            rot: Math.random() * 360,
-            rotV: (Math.random() - 0.5) * 8,
-            opacity: 1,
-        });
-    }
-
-    let frame = 0;
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const c = document.getElementById('confetti-canvas');
+    const ctx = c.getContext('2d');
+    c.width = window.innerWidth; c.height = window.innerHeight;
+    const ps = [], cols = ['#e85d2a', '#ffd700', '#27c97b', '#4fc3f7', '#ff851b', '#ffffff'];
+    for (let i = 0; i < 180; i++) ps.push({ x: Math.random()*c.width, y: -20-Math.random()*300, w: Math.random()*8+4, h: Math.random()*5+2, color: cols[Math.floor(Math.random()*cols.length)], vx: (Math.random()-0.5)*3, vy: Math.random()*3+1.5, r: Math.random()*360, rv: (Math.random()-0.5)*8, o: 1 });
+    let f = 0;
+    (function draw() {
+        ctx.clearRect(0, 0, c.width, c.height);
         let alive = false;
-
-        particles.forEach(p => {
-            if (p.opacity <= 0) return;
-            alive = true;
-            p.x += p.vx;
-            p.y += p.vy;
-            p.vy += 0.04;
-            p.rot += p.rotV;
-            if (frame > 80) p.opacity -= 0.006;
-
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.rotate((p.rot * Math.PI) / 180);
-            ctx.globalAlpha = Math.max(0, p.opacity);
-            ctx.fillStyle = p.color;
-            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
-            ctx.restore();
-        });
-
-        frame++;
-        if (alive && frame < 350) requestAnimationFrame(draw);
-        else ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    draw();
+        ps.forEach(p => { if (p.o <= 0) return; alive = true; p.x += p.vx; p.y += p.vy; p.vy += 0.04; p.r += p.rv; if (f > 80) p.o -= 0.006; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r*Math.PI/180); ctx.globalAlpha = Math.max(0, p.o); ctx.fillStyle = p.color; ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h); ctx.restore(); });
+        f++;
+        if (alive && f < 350) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, c.width, c.height);
+    })();
 }
-
-// ESC to close modals
-document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-        closeInfoModal();
-        closeRulesModal();
-    }
-});
