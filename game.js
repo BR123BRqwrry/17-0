@@ -51,9 +51,7 @@ function resetDraft() {
     document.getElementById('player-count').textContent = '';
     document.getElementById('placement-msg').textContent = 'Click a player, then a position';
 
-    // Reset rerolls
-    document.getElementById('reroll-btn').disabled = false;
-    document.getElementById('reroll-n').textContent = '2';
+    // No reroll button anymore
 
     // Reset filters
     document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
@@ -90,7 +88,6 @@ function doSpin() {
         // Hide spin overlay, show players
         document.getElementById('spin-overlay').classList.add('hidden');
         renderPlayers();
-        document.getElementById('reroll-btn').disabled = state.rerolls <= 0;
     }, 900);
 }
 
@@ -263,20 +260,6 @@ function filterPlayers() {
     if (state.hasSpun && state.currentSpin) renderPlayers();
 }
 
-// Reroll (one button, re-spins both team and era)
-function useReroll() {
-    if (state.rerolls <= 0 || state.spinning) return;
-    state.rerolls--;
-    document.getElementById('reroll-n').textContent = state.rerolls;
-    if (state.rerolls <= 0) document.getElementById('reroll-btn').disabled = true;
-    // Show spin overlay again
-    document.getElementById('spin-overlay').classList.remove('hidden');
-    document.getElementById('player-list').innerHTML = '';
-    document.getElementById('player-count').textContent = '';
-    state.selectedPlayer = null;
-    document.querySelectorAll('.field-slot').forEach(s => s.classList.remove('highlight'));
-    document.getElementById('placement-msg').textContent = 'Click a player, then a position';
-}
 
 // Simulation
 function runSim() {
