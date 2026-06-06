@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>17-0 | Build the Perfect Season</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Landing Screen -->
+        <div id="landing-screen" class="screen active">
+            <div class="landing-content">
+                <div class="title-block">
+                    <h1 class="main-title">17<span class="dash">-</span>0</h1>
+                    <p class="subtitle">CAN YOU BUILD A PERFECT SEASON?</p>
+                    <p class="tagline">Draft legends from every era. Forge an unstoppable dynasty.</p>
+                </div>
+                <div class="mode-buttons">
+                    <button class="btn btn-primary" onclick="startGame('classic')">
+                        <span class="btn-label">CLASSIC MODE</span>
+                        <span class="btn-sub">Stats visible</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="startGame('scout')">
+                        <span class="btn-label">SCOUT MODE</span>
+                        <span class="btn-sub">Names only</span>
+                    </button>
+                </div>
+                <button class="btn-text" onclick="showHowToPlay()">How to Play</button>
+            </div>
+        </div>
+
+        <!-- How to Play Modal -->
+        <div id="how-to-play-modal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+                <h2>HOW TO PLAY</h2>
+                <div class="rules-list">
+                    <div class="rule">
+                        <span class="rule-num">01</span>
+                        <p>Each round, a random NFL franchise and decade appear.</p>
+                    </div>
+                    <div class="rule">
+                        <span class="rule-num">02</span>
+                        <p>Choose one legend from that team's era to fill a roster slot.</p>
+                    </div>
+                    <div class="rule">
+                        <span class="rule-num">03</span>
+                        <p>Every player must come from a different decade. No era repeats.</p>
+                    </div>
+                    <div class="rule">
+                        <span class="rule-num">04</span>
+                        <p>Fill all 7 positions: QB, RB, WR, WR, TE, EDGE, DB.</p>
+                    </div>
+                    <div class="rule">
+                        <span class="rule-num">05</span>
+                        <p>A hidden simulation engine determines your season record.</p>
+                    </div>
+                    <div class="rule">
+                        <span class="rule-num">06</span>
+                        <p>Chemistry bonuses and era synergies affect your win total.</p>
+                    </div>
+                </div>
+                <div class="skips-info">
+                    <p><strong>SKIPS:</strong> 2 Team Skips + 2 Era Rerolls per game</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Draft Screen -->
+        <div id="draft-screen" class="screen">
+            <div class="draft-layout">
+                <!-- Roster Sidebar -->
+                <div class="roster-panel">
+                    <div class="roster-header">
+                        <span class="roster-title">ROSTER</span>
+                        <span class="round-indicator">RD <span id="round-num">1</span>/7</span>
+                    </div>
+                    <div class="roster-slots" id="roster-slots">
+                        <div class="roster-slot" data-position="QB">
+                            <span class="slot-pos">QB</span>
+                            <span class="slot-player">—</span>
+                            <span class="slot-meta"></span>
+                        </div>
+                        <div class="roster-slot" data-position="RB">
+                            <span class="slot-pos">RB</span>
+                            <span class="slot-player">—</span>
+                            <span class="slot-meta"></span>
+                        </div>
+                        <div class="roster-slot" data-position="WR1">
+                            <span class="slot-pos">WR</span>
+                            <span class="slot-player">—</span>
+                            <span class="slot-meta"></span>
+                        </div>
+                        <div class="roster-slot" data-position="WR2">
+                            <span class="slot-pos">WR</span>
+                            <span class="slot-player">—</span>
+                            <span class="slot-meta"></span>
+                        </div>
+                        <div class="roster-slot" data-position="TE">
+                            <span class="slot-pos">TE</span>
+                            <span class="slot-player">—</span>
+                            <span class="slot-meta"></span>
+                        </div>
+                        <div class="roster-slot" data-position="EDGE">
+                            <span class="slot-pos">EDGE</span>
+                            <span class="slot-player">—</span>
+                            <span class="slot-meta"></span>
+                        </div>
+                        <div class="roster-slot" data-position="DB">
+                            <span class="slot-pos">DB</span>
+                            <span class="slot-player">—</span>
+                            <span class="slot-meta"></span>
+                        </div>
+                    </div>
+                    <div class="skips-panel">
+                        <button class="skip-btn" id="team-skip-btn" onclick="useTeamSkip()">
+                            <span class="skip-icon">&#8635;</span> TEAM SKIP <span class="skip-count" id="team-skip-count">2</span>
+                        </button>
+                        <button class="skip-btn" id="era-skip-btn" onclick="useEraSkip()">
+                            <span class="skip-icon">&#8635;</span> ERA REROLL <span class="skip-count" id="era-skip-count">2</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Draft Area -->
+                <div class="draft-main">
+                    <!-- Spin Area -->
+                    <div class="spin-area" id="spin-area">
+                        <div class="spin-container">
+                            <div class="spin-slot" id="franchise-slot">
+                                <span class="spin-label">FRANCHISE</span>
+                                <div class="spin-reel" id="franchise-reel">
+                                    <span class="spin-value">—</span>
+                                </div>
+                            </div>
+                            <div class="spin-divider">&times;</div>
+                            <div class="spin-slot" id="decade-slot">
+                                <span class="spin-label">DECADE</span>
+                                <div class="spin-reel" id="decade-reel">
+                                    <span class="spin-value">—</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Player Choices -->
+                    <div class="choices-area" id="choices-area">
+                        <div class="choices-header">
+                            <span>CHOOSE YOUR PLAYER</span>
+                            <span class="position-badge" id="position-badge">QB</span>
+                        </div>
+                        <div class="player-cards" id="player-cards">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simulation Screen -->
+        <div id="sim-screen" class="screen">
+            <div class="sim-content">
+                <div class="sim-header">
+                    <h2>SIMULATING SEASON...</h2>
+                    <div class="sim-progress">
+                        <div class="sim-bar" id="sim-bar"></div>
+                    </div>
+                </div>
+                <div class="sim-weeks" id="sim-weeks">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <div class="results-content">
+                <div class="record-reveal" id="record-reveal">
+                    <span class="record-wins" id="record-wins">17</span>
+                    <span class="record-dash">-</span>
+                    <span class="record-losses" id="record-losses">0</span>
+                </div>
+                <p class="record-subtitle" id="record-subtitle">PERFECT SEASON</p>
+                <div class="results-roster" id="results-roster">
+                    <!-- Dynamically populated -->
+                </div>
+                <div class="results-bonuses" id="results-bonuses">
+                    <!-- Chemistry/synergy info -->
+                </div>
+                <div class="results-actions">
+                    <button class="btn btn-primary" onclick="shareResults()">SHARE</button>
+                    <button class="btn btn-secondary" onclick="playAgain()">PLAY AGAIN</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confetti Canvas -->
+        <canvas id="confetti-canvas"></canvas>
+    </div>
+
+    <script src="players.js"></script>
+    <script src="engine.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
