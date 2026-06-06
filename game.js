@@ -1,353 +1,373 @@
-// Game State
-let gameState = {
-    mode: 'classic', // 'classic' or 'scout'
+let state = {
+    mode: 'classic',
     round: 0,
     roster: {},
     usedDecades: [],
-    teamSkips: 2,
-    eraRerolls: 2,
+    skips: 2,
+    rerolls: 2,
     currentSpin: null,
-    positionOrder: ['QB', 'RB', 'WR1', 'WR2', 'TE', 'EDGE', 'DB'],
+    spinning: false,
+    posOrder: ['QB', 'RB', 'WR1', 'WR2', 'TE', 'EDGE', 'DB'],
 };
 
-// Screen management
-function showScreen(id) {
+// Screens
+function show(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 }
 
+// Landing
 function startGame(mode) {
-    gameState = {
+    state = {
         mode,
         round: 0,
         roster: {},
         usedDecades: [],
-        teamSkips: 2,
-        eraRerolls: 2,
+        skips: 2,
+        rerolls: 2,
         currentSpin: null,
-        positionOrder: ['QB', 'RB', 'WR1', 'WR2', 'TE', 'EDGE', 'DB'],
+        spinning: false,
+        posOrder: ['QB', 'RB', 'WR1', 'WR2', 'TE', 'EDGE', 'DB'],
     };
-    showScreen('draft-screen');
-    resetRosterUI();
-    nextRound();
+    show('draft-screen');
+    resetDraftUI();
 }
 
-function showHowToPlay() {
-    document.getElementById('how-to-play-modal').classList.add('active');
-}
-
-function closeModal() {
-    document.getElementById('how-to-play-modal').classList.remove('active');
-}
-
-function resetRosterUI() {
-    document.querySelectorAll('.roster-slot').forEach(slot => {
-        slot.classList.remove('filled', 'active');
-        slot.querySelector('.slot-player').textContent = '—';
-        slot.querySelector('.slot-meta').textContent = '';
+function resetDraftUI() {
+    // Reset mini slots
+    document.querySelectorAll('.mini-slot').forEach((s, i) => {
+        s.classList.remove('filled', 'active');
+        if (i === 0) s.classList.add('active');
     });
-    document.getElementById('team-skip-count').textContent = '2';
-    document.getElementById('era-skip-count').textContent = '2';
-    document.getElementById('team-skip-btn').disabled = false;
-    document.getElementById('era-skip-btn').disabled = false;
+
+    // Reset spin display to default (49ers x 1980s)
+    document.getElementById('franchise-val').textContent = '49ers';
+    document.getElementById('decade-val').textContent = '1980s';
+    document.getElementById('franchise-val').classList.remove('landed', 'spinning');
+    document.getElementById('decade-val').classList.remove('landed', 'spinning');
+
+    // Reset buttons
+    document.getElementById('skip-btn').disabled = true;
+    document.getElementById('reroll-btn').disabled = true;
+    document.getElementById('spin-btn').disabled = false;
+    document.getElementById('skip-count').textContent = '2';
+    document.getElementById('reroll-count').textContent = '2';
+
+    // Hide picks
+    document.getElementById('picks-zone').classList.remove('visible');
+
+    // Show spin zone
+    document.getElementById('spin-zone').style.display = '';
 }
 
-// Draft Logic
-function nextRound() {
-    if (gameState.round >= 7) {
-        runSimulation();
-        return;
-    }
+// Spin
+function doSpin() {
+    if (state.spinning) return;
+    state.spinning = true;
 
-    const position = gameState.positionOrder[gameState.round];
-    document.getElementById('round-num').textContent = gameState.round + 1;
-    document.getElementById('position-badge').textContent = position === 'WR1' || position === 'WR2' ? 'WR' : position;
+    const pos = state.posOrder[state.round];
+    const spin = getRandomTeamForPosition(pos, state.usedDecades);
+    if (!spin) return;
 
-    // Highlight active slot
-    document.querySelectorAll('.roster-slot').forEach(s => s.classList.remove('active'));
-    const activeSlot = document.querySelector(`[data-position="${position}"]`);
-    if (activeSlot) activeSlot.classList.add('active');
+    state.currentSpin = spin;
 
-    // Hide choices
-    document.getElementById('choices-area').classList.remove('visible');
+    // Hide picks from previous round
+    document.getElementById('picks-zone').classList.remove('visible');
 
-    // Spin
-    spinForPlayers(position);
-}
+    // Disable spin button during animation
+    document.getElementById('spin-btn').disabled = true;
 
-function spinForPlayers(position) {
-    const spin = getRandomTeamForPosition(position, gameState.usedDecades);
-    if (!spin) {
-        // Extremely unlikely fallback
-        gameState.round++;
-        nextRound();
-        return;
-    }
+    const franchiseEl = document.getElementById('franchise-val');
+    const decadeEl = document.getElementById('decade-val');
 
-    gameState.currentSpin = spin;
+    franchiseEl.classList.remove('landed');
+    decadeEl.classList.remove('landed');
+    franchiseEl.classList.add('spinning');
+    decadeEl.classList.add('spinning');
 
-    // Animate spin
-    const franchiseReel = document.getElementById('franchise-reel');
-    const decadeReel = document.getElementById('decade-reel');
+    // Rapid cycling
+    let count = 0;
+    const cycle = setInterval(() => {
+        franchiseEl.textContent = TEAMS[Math.floor(Math.random() * TEAMS.length)];
+        decadeEl.textContent = DECADES[Math.floor(Math.random() * DECADES.length)];
+        count++;
+    }, 50);
 
-    franchiseReel.classList.remove('landed');
-    decadeReel.classList.remove('landed');
-    franchiseReel.classList.add('spinning');
-    decadeReel.classList.add('spinning');
-
-    // Rapid name cycling
-    let spinCount = 0;
-    const spinInterval = setInterval(() => {
-        franchiseReel.querySelector('.spin-value').textContent = TEAMS[Math.floor(Math.random() * TEAMS.length)];
-        decadeReel.querySelector('.spin-value').textContent = DECADES[Math.floor(Math.random() * DECADES.length)];
-        spinCount++;
-    }, 60);
-
-    // Land franchise first
+    // Land franchise
     setTimeout(() => {
-        franchiseReel.classList.remove('spinning');
-        franchiseReel.classList.add('landed');
-        franchiseReel.querySelector('.spin-value').textContent = spin.team;
-    }, 800);
+        franchiseEl.classList.remove('spinning');
+        franchiseEl.classList.add('landed');
+        franchiseEl.textContent = spin.team;
+    }, 700);
 
-    // Land decade second
+    // Land decade
     setTimeout(() => {
-        clearInterval(spinInterval);
-        decadeReel.classList.remove('spinning');
-        decadeReel.classList.add('landed');
-        decadeReel.querySelector('.spin-value').textContent = spin.decade;
+        clearInterval(cycle);
+        decadeEl.classList.remove('spinning');
+        decadeEl.classList.add('landed');
+        decadeEl.textContent = spin.decade;
 
-        // Show player choices
-        setTimeout(() => showChoices(spin, position), 300);
-    }, 1200);
+        state.spinning = false;
+
+        // Enable skip/reroll
+        document.getElementById('skip-btn').disabled = state.skips <= 0;
+        document.getElementById('reroll-btn').disabled = state.rerolls <= 0;
+
+        // Show picks after short delay
+        setTimeout(() => showPicks(spin, pos), 250);
+    }, 1100);
 }
 
-function showChoices(spin, position) {
-    const container = document.getElementById('player-cards');
-    container.innerHTML = '';
+function showPicks(spin, position) {
+    const zone = document.getElementById('picks-zone');
+    const list = document.getElementById('picks-list');
+    const posLabel = document.getElementById('picks-pos');
+    const eraLabel = document.getElementById('picks-era');
 
-    // Shuffle and limit to 5
+    const displayPos = position === 'WR1' || position === 'WR2' ? 'WR' : position;
+    posLabel.textContent = `PICK ${state.round + 1}/7 — ${displayPos}`;
+    eraLabel.textContent = `${spin.decade}`;
+
+    list.innerHTML = '';
+
     const players = [...spin.players].sort(() => Math.random() - 0.5).slice(0, 5);
 
-    players.forEach((player, idx) => {
+    players.forEach(player => {
         const card = document.createElement('div');
-        card.className = 'player-card';
-        card.style.animationDelay = `${idx * 0.08}s`;
-        card.onclick = () => selectPlayer(player, position, spin.decade);
+        card.className = 'pick-card';
+        card.onclick = () => pickPlayer(player, position, spin.decade);
 
         let statsHtml = '';
-        if (gameState.mode === 'classic') {
-            const statEntries = Object.entries(player.stats);
-            statsHtml = `<div class="player-stats">${statEntries.map(([key, val]) =>
-                `<span>${key.toUpperCase()}: ${val}</span>`
-            ).join('')}</div>`;
+        if (state.mode === 'classic') {
+            const entries = Object.entries(player.stats);
+            statsHtml = `<div class="pick-stats">${entries.map(([k, v]) => `${k}: ${v}`).join(' · ')}</div>`;
         }
 
         let badgesHtml = '';
         if (player.badges.length > 0) {
-            badgesHtml = `<div class="player-badges">${player.badges.map(b => {
-                const cls = b === 'HOF' ? 'badge-hof' : b === 'MVP' || b === 'SB MVP' ? 'badge-mvp' : 'badge-allpro';
+            badgesHtml = `<div class="pick-right">${player.badges.map(b => {
+                let cls = 'badge-ap';
+                if (b === 'HOF') cls = 'badge-hof';
+                else if (b === 'MVP' || b === 'SB MVP') cls = 'badge-mvp';
+                else if (b === 'DPOY') cls = 'badge-dpoy';
                 return `<span class="badge ${cls}">${b}</span>`;
             }).join('')}</div>`;
         }
 
-        const teamLabel = `<span class="player-team">${player.team}</span>`;
         card.innerHTML = `
-            <div class="player-card-info">
-                <span class="player-name">${player.name} ${teamLabel}</span>
+            <div class="pick-left">
+                <span class="pick-name">${player.name}</span>
+                <span class="pick-team">${player.team}</span>
                 ${statsHtml}
             </div>
             ${badgesHtml}
         `;
 
-        container.appendChild(card);
+        list.appendChild(card);
     });
 
-    document.getElementById('choices-area').classList.add('visible');
+    zone.classList.add('visible');
 }
 
-function selectPlayer(player, position, decade) {
-    // Update roster
-    gameState.roster[position] = player;
-    gameState.usedDecades.push(decade);
+function pickPlayer(player, position, decade) {
+    state.roster[position] = player;
+    state.usedDecades.push(decade);
 
-    // Update roster slot UI
-    const slot = document.querySelector(`[data-position="${position}"]`);
-    slot.classList.remove('active');
-    slot.classList.add('filled');
-    slot.querySelector('.slot-player').textContent = player.name;
-    slot.querySelector('.slot-meta').textContent = `${decade} ${player.team}`;
+    // Update mini slot
+    const slots = document.querySelectorAll('.mini-slot');
+    slots[state.round].classList.remove('active');
+    slots[state.round].classList.add('filled');
 
-    // Next round
-    gameState.round++;
-    setTimeout(nextRound, 400);
-}
+    state.round++;
 
-// Skip System
-function useTeamSkip() {
-    if (gameState.teamSkips <= 0 || !gameState.currentSpin) return;
-    gameState.teamSkips--;
-    document.getElementById('team-skip-count').textContent = gameState.teamSkips;
-    if (gameState.teamSkips <= 0) {
-        document.getElementById('team-skip-btn').disabled = true;
+    if (state.round >= 7) {
+        // All picks done — simulate
+        setTimeout(runSim, 400);
+        return;
     }
 
-    const position = gameState.positionOrder[gameState.round];
-    document.getElementById('choices-area').classList.remove('visible');
-    spinForPlayers(position);
+    // Mark next slot active
+    slots[state.round].classList.add('active');
+
+    // Hide picks, show spin button for next round
+    document.getElementById('picks-zone').classList.remove('visible');
+    document.getElementById('spin-btn').disabled = false;
+    document.getElementById('skip-btn').disabled = true;
+    document.getElementById('reroll-btn').disabled = true;
+
+    // Reset spin display
+    document.getElementById('franchise-val').classList.remove('landed');
+    document.getElementById('decade-val').classList.remove('landed');
 }
 
-function useEraSkip() {
-    if (gameState.eraRerolls <= 0 || !gameState.currentSpin) return;
-    gameState.eraRerolls--;
-    document.getElementById('era-skip-count').textContent = gameState.eraRerolls;
-    if (gameState.eraRerolls <= 0) {
-        document.getElementById('era-skip-btn').disabled = true;
-    }
+// Skips and rerolls
+function useSkip() {
+    if (state.skips <= 0 || state.spinning || !state.currentSpin) return;
+    state.skips--;
+    document.getElementById('skip-count').textContent = state.skips;
+    document.getElementById('picks-zone').classList.remove('visible');
+    document.getElementById('spin-btn').disabled = false;
+    document.getElementById('skip-btn').disabled = true;
+    document.getElementById('reroll-btn').disabled = true;
+    document.getElementById('franchise-val').classList.remove('landed');
+    document.getElementById('decade-val').classList.remove('landed');
+}
 
-    const position = gameState.positionOrder[gameState.round];
-    document.getElementById('choices-area').classList.remove('visible');
-    spinForPlayers(position);
+function useReroll() {
+    if (state.rerolls <= 0 || state.spinning || !state.currentSpin) return;
+    state.rerolls--;
+    document.getElementById('reroll-count').textContent = state.rerolls;
+    document.getElementById('picks-zone').classList.remove('visible');
+    // Auto-spin again
+    doSpin();
 }
 
 // Simulation
-function runSimulation() {
-    showScreen('sim-screen');
+function runSim() {
+    show('sim-screen');
 
-    const engine = new SimulationEngine(gameState.roster);
+    const engine = new SimulationEngine(state.roster);
     const result = engine.simulateSeason();
 
-    // Animate simulation
-    const weeksContainer = document.getElementById('sim-weeks');
-    weeksContainer.innerHTML = '';
-    const simBar = document.getElementById('sim-bar');
+    const grid = document.getElementById('sim-grid');
+    const bar = document.getElementById('sim-bar');
+    grid.innerHTML = '';
+    bar.style.width = '0%';
 
     result.weeks.forEach((w, i) => {
-        const weekEl = document.createElement('div');
-        weekEl.className = 'sim-week';
-        weekEl.textContent = `WK${i + 1} ${w}`;
-        weeksContainer.appendChild(weekEl);
+        const el = document.createElement('div');
+        el.className = 'sim-week';
+        el.textContent = `W${i + 1} ${w}`;
+        grid.appendChild(el);
     });
 
-    let weekIdx = 0;
-    const revealInterval = setInterval(() => {
-        if (weekIdx >= 17) {
-            clearInterval(revealInterval);
-            setTimeout(() => showResults(result), 800);
+    let idx = 0;
+    const interval = setInterval(() => {
+        if (idx >= 17) {
+            clearInterval(interval);
+            setTimeout(() => showResults(result), 600);
             return;
         }
-
-        const weekEl = weeksContainer.children[weekIdx];
-        weekEl.classList.add('revealed');
-        weekEl.classList.add(result.weeks[weekIdx] === 'W' ? 'win' : 'loss');
-        simBar.style.width = `${((weekIdx + 1) / 17) * 100}%`;
-        weekIdx++;
-    }, 150);
+        const el = grid.children[idx];
+        el.classList.add('show', result.weeks[idx]);
+        bar.style.width = `${((idx + 1) / 17) * 100}%`;
+        idx++;
+    }, 130);
 }
 
 function showResults(result) {
-    showScreen('results-screen');
+    show('results-screen');
 
-    const recordReveal = document.getElementById('record-reveal');
-    document.getElementById('record-wins').textContent = result.wins;
-    document.getElementById('record-losses').textContent = result.losses;
+    const record = document.getElementById('result-record');
+    document.getElementById('rr-wins').textContent = result.wins;
+    document.getElementById('rr-losses').textContent = result.losses;
 
+    record.classList.remove('perfect');
     if (result.wins === 17) {
-        recordReveal.classList.add('perfect');
-        document.getElementById('record-subtitle').textContent = 'PERFECT SEASON';
+        record.classList.add('perfect');
+        document.getElementById('result-label').textContent = 'PERFECT SEASON';
         launchConfetti();
     } else if (result.wins >= 15) {
-        document.getElementById('record-subtitle').textContent = 'ELITE SEASON';
+        document.getElementById('result-label').textContent = 'ELITE SEASON';
     } else if (result.wins >= 12) {
-        document.getElementById('record-subtitle').textContent = 'PLAYOFF CONTENDER';
+        document.getElementById('result-label').textContent = 'PLAYOFF TEAM';
     } else if (result.wins >= 9) {
-        document.getElementById('record-subtitle').textContent = 'DECENT SQUAD';
+        document.getElementById('result-label').textContent = 'MIDDLE OF THE PACK';
     } else {
-        document.getElementById('record-subtitle').textContent = 'REBUILD MODE';
+        document.getElementById('result-label').textContent = 'REBUILD MODE';
     }
 
-    // Roster display
-    const rosterContainer = document.getElementById('results-roster');
-    rosterContainer.innerHTML = '';
-    gameState.positionOrder.forEach(pos => {
-        const player = gameState.roster[pos];
-        if (!player) return;
-        const item = document.createElement('div');
-        item.className = 'results-roster-item';
+    // Roster
+    const rosterEl = document.getElementById('result-roster');
+    rosterEl.innerHTML = '';
+    state.posOrder.forEach(pos => {
+        const p = state.roster[pos];
+        if (!p) return;
         const displayPos = pos === 'WR1' || pos === 'WR2' ? 'WR' : pos;
+        const item = document.createElement('div');
+        item.className = 'rr-item';
         item.innerHTML = `
-            <span class="results-pos">${displayPos}</span>
-            <span class="results-player-name">${player.name}</span>
-            <span class="results-player-meta">${player.decade} ${player.team}</span>
+            <span class="rr-pos">${displayPos}</span>
+            <span class="rr-name">${p.name}</span>
+            <span class="rr-meta">${p.decade} ${p.team}</span>
         `;
-        rosterContainer.appendChild(item);
+        rosterEl.appendChild(item);
     });
 
-    // Bonuses display
-    const bonusContainer = document.getElementById('results-bonuses');
-    bonusContainer.innerHTML = '';
-
+    // Bonuses
+    const bonusEl = document.getElementById('result-bonuses');
+    bonusEl.innerHTML = '';
     result.synergies.forEach(s => {
         const el = document.createElement('div');
-        el.className = 'bonus-item';
-        el.textContent = `${s.label} ${s.bonus}`;
-        bonusContainer.appendChild(el);
+        el.className = 'bonus-line';
+        el.textContent = `+ ${s.label} (${s.bonus})`;
+        bonusEl.appendChild(el);
     });
-
     result.penalties.forEach(p => {
         const el = document.createElement('div');
-        el.className = 'bonus-item penalty';
-        el.textContent = `${p.label} ${p.value}`;
-        bonusContainer.appendChild(el);
+        el.className = 'bonus-line neg';
+        el.textContent = `${p.label} (${p.value})`;
+        bonusEl.appendChild(el);
     });
 }
 
 // Share
 function shareResults() {
-    let text = `17-0\n\n`;
-    gameState.positionOrder.forEach(pos => {
-        const player = gameState.roster[pos];
-        if (!player) return;
-        const displayPos = pos === 'WR1' || pos === 'WR2' ? 'WR' : pos;
-        text += `${displayPos}: ${player.name} (${player.decade} ${player.team})\n`;
+    let text = '17–0\n\n';
+    state.posOrder.forEach(pos => {
+        const p = state.roster[pos];
+        if (!p) return;
+        const dp = pos === 'WR1' || pos === 'WR2' ? 'WR' : pos;
+        text += `${dp}: ${p.name} (${p.decade} ${p.team})\n`;
     });
-
-    const wins = document.getElementById('record-wins').textContent;
-    const losses = document.getElementById('record-losses').textContent;
-    text += `\nRecord: ${wins}-${losses}`;
-    text += `\n\nCan you go 17-0?`;
+    const w = document.getElementById('rr-wins').textContent;
+    const l = document.getElementById('rr-losses').textContent;
+    text += `\n${w}–${l}\n\nCan you go 17-0? 17-0game.com`;
 
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-            showToast('Copied to clipboard!');
-        });
+        navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard'));
     } else {
-        // Fallback
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
         document.execCommand('copy');
-        document.body.removeChild(textarea);
-        showToast('Copied to clipboard!');
+        document.body.removeChild(ta);
+        toast('Copied to clipboard');
     }
 }
 
-function showToast(message) {
-    let toast = document.querySelector('.toast');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.className = 'toast';
-        document.body.appendChild(toast);
+function toast(msg) {
+    let el = document.querySelector('.toast');
+    if (!el) {
+        el = document.createElement('div');
+        el.className = 'toast';
+        document.body.appendChild(el);
     }
-    toast.textContent = message;
-    toast.classList.add('visible');
-    setTimeout(() => toast.classList.remove('visible'), 2500);
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
 }
 
 function playAgain() {
-    document.getElementById('record-reveal').classList.remove('perfect');
-    showScreen('landing-screen');
+    show('landing-screen');
+}
+
+// Modals
+function showInfo() {
+    document.getElementById('info-modal').classList.add('active');
+}
+
+function closeInfoModal() {
+    document.getElementById('info-modal').classList.remove('active');
+}
+
+function showRules() {
+    document.getElementById('rules-modal').classList.add('active');
+}
+
+function closeRulesModal() {
+    document.getElementById('rules-modal').classList.remove('active');
 }
 
 // Confetti
@@ -358,44 +378,40 @@ function launchConfetti() {
     canvas.height = window.innerHeight;
 
     const particles = [];
-    const colors = ['#ff3d3d', '#ffd700', '#00e676', '#6495ed', '#ff6b35', '#ffffff'];
+    const colors = ['#ff4136', '#ffdc00', '#2ecc40', '#7fdbff', '#ff851b', '#ffffff'];
 
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 180; i++) {
         particles.push({
             x: Math.random() * canvas.width,
-            y: -20 - Math.random() * 200,
-            w: Math.random() * 10 + 5,
-            h: Math.random() * 6 + 3,
+            y: -20 - Math.random() * 300,
+            w: Math.random() * 8 + 4,
+            h: Math.random() * 5 + 2,
             color: colors[Math.floor(Math.random() * colors.length)],
-            vx: (Math.random() - 0.5) * 4,
-            vy: Math.random() * 3 + 2,
-            rotation: Math.random() * 360,
-            rotationSpeed: (Math.random() - 0.5) * 10,
+            vx: (Math.random() - 0.5) * 3,
+            vy: Math.random() * 3 + 1.5,
+            rot: Math.random() * 360,
+            rotV: (Math.random() - 0.5) * 8,
             opacity: 1,
         });
     }
 
     let frame = 0;
-    function animate() {
+    function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        let active = false;
+        let alive = false;
 
         particles.forEach(p => {
             if (p.opacity <= 0) return;
-            active = true;
-
+            alive = true;
             p.x += p.vx;
             p.y += p.vy;
-            p.vy += 0.05;
-            p.rotation += p.rotationSpeed;
-
-            if (frame > 60) {
-                p.opacity -= 0.005;
-            }
+            p.vy += 0.04;
+            p.rot += p.rotV;
+            if (frame > 80) p.opacity -= 0.006;
 
             ctx.save();
             ctx.translate(p.x, p.y);
-            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.rotate((p.rot * Math.PI) / 180);
             ctx.globalAlpha = Math.max(0, p.opacity);
             ctx.fillStyle = p.color;
             ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
@@ -403,17 +419,16 @@ function launchConfetti() {
         });
 
         frame++;
-        if (active && frame < 300) {
-            requestAnimationFrame(animate);
-        } else {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
+        if (alive && frame < 350) requestAnimationFrame(draw);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
-    animate();
+    draw();
 }
 
-// Keyboard shortcut: ESC closes modals
+// ESC to close modals
 document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape') {
+        closeInfoModal();
+        closeRulesModal();
+    }
 });
