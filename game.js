@@ -337,9 +337,7 @@ function toast(msg) {
 function playAgain() { show('landing-screen'); }
 
 function confirmExit() {
-    if (confirm('Are you sure you want to exit? Your draft progress will be lost.')) {
-        show('landing-screen');
-    }
+    openModal('exit-modal');
 }
 
 // Modals
