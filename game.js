@@ -1,8 +1,9 @@
 let state = {
-    mode: 'classic',
+    mode: 'scout',
     round: 0,
     roster: {},
     usedDecades: [],
+    usedTeamDecades: [],
     rerolls: 2,
     currentSpin: null,
     selectedPlayer: null,
@@ -23,6 +24,7 @@ function startGame(mode) {
         round: 0,
         roster: {},
         usedDecades: [],
+        usedTeamDecades: [],
         rerolls: 2,
         currentSpin: null,
         selectedPlayer: null,
@@ -65,7 +67,7 @@ function doSpin() {
     state.spinning = true;
     state.hasSpun = true;
 
-    const spin = getRandomTeamForPosition('ALL', state.usedDecades);
+    const spin = getRandomTeamForPosition('ALL', state.usedTeamDecades);
     if (!spin) { state.spinning = false; return; }
     state.currentSpin = spin;
 
@@ -129,6 +131,14 @@ function renderPlayers() {
 
         const posLabel = player.pos.map(p => p.replace('1', '').replace('2', '')).filter((v, i, a) => a.indexOf(v) === i).join(' · ');
 
+        let statsHtml = '';
+        const entries = Object.entries(player.stats).filter(([k]) => k !== 'YRS');
+        if (entries.length > 0) {
+            statsHtml = `<div class="p-stats">${entries.map(([k, v]) =>
+                `<div class="p-stat"><span class="p-stat-val">${v}</span><span class="p-stat-label">${k}</span></div>`
+            ).join('')}</div>`;
+        }
+
         let badgesHtml = '';
         if (player.badges.length > 0) {
             badgesHtml = `<div class="p-badges">${player.badges.map(b => {
@@ -146,6 +156,7 @@ function renderPlayers() {
                 <span class="p-meta">${posLabel} · ${state.currentSpin.team} · ${state.currentSpin.decade}</span>
                 ${badgesHtml}
             </div>
+            ${statsHtml}
         `;
 
         list.appendChild(row);
@@ -203,6 +214,7 @@ document.addEventListener('click', (e) => {
 function placePlayer(player, pos) {
     state.roster[pos] = player;
     state.usedDecades.push(state.currentSpin.decade);
+    state.usedTeamDecades.push(`${state.currentSpin.team}_${state.currentSpin.decade}`);
     state.round++;
     state.selectedPlayer = null;
 
