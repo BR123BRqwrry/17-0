@@ -101,8 +101,6 @@ function renderPlayers() {
     const players = getAllPlayersForSpin();
     const filter = document.querySelector('.ftab.active')?.dataset.filter || 'All';
     const search = document.getElementById('search-input').value.toLowerCase();
-    const sort = document.getElementById('sort-select').value;
-
     let filtered = players;
 
     if (filter !== 'All') {
@@ -117,11 +115,7 @@ function renderPlayers() {
         filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
     }
 
-    if (sort === 'rating') {
-        filtered.sort((a, b) => b.rating - a.rating);
-    } else {
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-    }
+    filtered.sort((a, b) => a.name.localeCompare(b.name));
 
     document.getElementById('player-count').textContent = `${filtered.length} players available`;
 
@@ -134,14 +128,6 @@ function renderPlayers() {
         row.onclick = () => selectPlayer(player, row);
 
         const posLabel = player.pos.map(p => p.replace('1', '').replace('2', '')).filter((v, i, a) => a.indexOf(v) === i).join(' · ');
-
-        let statsHtml = '';
-        if (state.mode === 'classic') {
-            const entries = Object.entries(player.stats);
-            statsHtml = `<div class="p-stats">${entries.map(([k, v]) =>
-                `<div class="p-stat"><span class="p-stat-val">${v}</span><span class="p-stat-label">${k}</span></div>`
-            ).join('')}</div>`;
-        }
 
         let badgesHtml = '';
         if (player.badges.length > 0) {
@@ -160,7 +146,6 @@ function renderPlayers() {
                 <span class="p-meta">${posLabel} · ${state.currentSpin.team} · ${state.currentSpin.decade}</span>
                 ${badgesHtml}
             </div>
-            ${statsHtml}
         `;
 
         list.appendChild(row);
@@ -338,6 +323,12 @@ function toast(msg) {
 }
 
 function playAgain() { show('landing-screen'); }
+
+function confirmExit() {
+    if (confirm('Are you sure you want to exit? Your draft progress will be lost.')) {
+        show('landing-screen');
+    }
+}
 
 // Modals
 function openModal(id) { document.getElementById(id).classList.add('active'); }

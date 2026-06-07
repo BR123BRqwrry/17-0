@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>17-0</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -17,13 +18,9 @@
                 <div class="landing-logo">17–0</div>
                 <p class="landing-desc">Draft an all-time NFL roster — one legend per era — and the sim projects your 17-game season.</p>
                 <div class="landing-modes">
-                    <div class="mode-row" onclick="startGame('classic')">
-                        <span class="mode-arrow">&#9654;</span>
-                        <div><strong>Classic</strong><span>Full stats</span></div>
-                    </div>
                     <div class="mode-row" onclick="startGame('scout')">
                         <span class="mode-arrow">&#9654;</span>
-                        <div><strong>Scout Mode</strong><span>Stats hidden</span></div>
+                        <div><strong>Play</strong><span>Draft your legends</span></div>
                     </div>
                 </div>
                 <button class="text-link" onclick="openModal('rules-modal')">How to play</button>
@@ -35,7 +32,7 @@
             <!-- Top bar -->
             <div class="topbar">
                 <div class="topbar-left">
-                    <span class="topbar-logo">17–0</span>
+                    <span class="topbar-logo" onclick="confirmExit()" style="cursor:pointer">17–0</span>
                     <span class="topbar-round" id="topbar-round">Round 1/8</span>
                 </div>
                 <div class="topbar-center">
@@ -64,10 +61,6 @@
                         </div>
                         <div class="panel-row2">
                             <input type="text" class="search-input" id="search-input" placeholder="Search..." oninput="filterPlayers()">
-                            <select class="sort-select" id="sort-select" onchange="filterPlayers()">
-                                <option value="rating">Rating</option>
-                                <option value="name">Name</option>
-                            </select>
                         </div>
                         <div class="player-count" id="player-count">0 players available</div>
                     </div>
