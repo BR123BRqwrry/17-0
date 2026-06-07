@@ -314,17 +314,55 @@ function showResults(result) {
 }
 
 function shareResults() {
-    let text = '17–0\n\n';
-    POS_ORDER.forEach((pos, i) => {
-        const p = state.roster[pos];
-        if (!p) return;
-        const dp = pos.replace('1', '').replace('2', '');
-        text += `${dp}: ${p.name} (${state.usedDecades[i]} ${p.team})\n`;
-    });
-    text += `\n${document.getElementById('rr-w').textContent}–${document.getElementById('rr-l').textContent}\n\nCan you go 17-0? 17-0game.com`;
+    openModal('share-modal');
+    document.getElementById('share-confirm').style.opacity = '0';
+}
 
-    if (navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard'));
-    else { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); toast('Copied to clipboard'); }
+function downloadPNG() {
+    const target = document.querySelector('.results-wrap');
+    html2canvas(target, {
+        backgroundColor: '#1a2332',
+        scale: 2,
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = '17-0-results.png';
+        link.href = canvas.toDataURL();
+        link.click();
+        showShareConfirm('PNG downloaded!');
+    });
+}
+
+function copyShareLink() {
+    const data = {
+        w: parseInt(document.getElementById('rr-w').textContent),
+        l: parseInt(document.getElementById('rr-l').textContent),
+        r: POS_ORDER.map((pos, i) => {
+            const p = state.roster[pos];
+            if (!p) return null;
+            return { n: p.name, t: p.team, d: p.decade, pos: pos };
+        }).filter(Boolean)
+    };
+    const encoded = btoa(encodeURIComponent(JSON.stringify(data)));
+    const url = `https://17-0game.com/?s=${encoded}`;
+
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => showShareConfirm('Link copied!'));
+    } else {
+        const t = document.createElement('textarea');
+        t.value = url;
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand('copy');
+        document.body.removeChild(t);
+        showShareConfirm('Link copied!');
+    }
+}
+
+function showShareConfirm(msg) {
+    const el = document.getElementById('share-confirm');
+    el.textContent = msg;
+    el.style.opacity = '1';
+    setTimeout(() => { el.style.opacity = '0'; }, 2500);
 }
 
 function toast(msg) {
@@ -334,7 +372,38 @@ function toast(msg) {
     setTimeout(() => el.classList.remove('show'), 2500);
 }
 
-function playAgain() { show('landing-screen'); }
+function playAgain() {
+    history.replaceState(null, '', window.location.pathname);
+    show('landing-screen');
+}
+
+// Handle shared result links
+(function checkShareLink() {
+    const params = new URLSearchParams(window.location.search);
+    const s = params.get('s');
+    if (!s) return;
+    try {
+        const data = JSON.parse(decodeURIComponent(atob(s)));
+        show('results-screen');
+        document.getElementById('rr-w').textContent = data.w;
+        document.getElementById('rr-l').textContent = data.l;
+        const rec = document.getElementById('result-record');
+        rec.classList.remove('perfect');
+        if (data.w === 17) { rec.classList.add('perfect'); document.getElementById('result-sub').textContent = 'PERFECT SEASON'; launchConfetti(); }
+        else if (data.w >= 15) document.getElementById('result-sub').textContent = 'ELITE SEASON';
+        else if (data.w >= 12) document.getElementById('result-sub').textContent = 'PLAYOFF TEAM';
+        else if (data.w >= 9) document.getElementById('result-sub').textContent = 'MIDDLE OF THE PACK';
+        else document.getElementById('result-sub').textContent = 'REBUILD MODE';
+
+        const roster = document.getElementById('result-roster');
+        roster.innerHTML = '';
+        data.r.forEach(p => {
+            const dp = p.pos.replace('1', '').replace('2', '');
+            roster.innerHTML += `<div class="rr-item"><span class="rr-pos">${dp}</span><span class="rr-name">${p.n}</span><span class="rr-meta">${p.d} ${p.t}</span></div>`;
+        });
+        document.getElementById('result-bonuses').innerHTML = '';
+    } catch (e) {}
+})();
 
 function confirmExit() {
     openModal('exit-modal');
