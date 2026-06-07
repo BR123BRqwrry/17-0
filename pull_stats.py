@@ -21,8 +21,11 @@ TEAM_MAP = {
 
 GAME_POS_MAP = {
     'QB': 'QB', 'RB': 'RB', 'FB': 'RB',
-    'WR': 'WR1', 'TE': 'TE', 'OL': 'OL',
-    'DL': 'EDGE', 'LB': 'DB', 'DB': 'DB',
+    'WR': 'WR1', 'TE': 'TE',
+    'T': 'OL', 'G': 'OL', 'C': 'OL', 'OL': 'OL', 'OT': 'OL',
+    'DE': 'EDGE', 'DT': 'EDGE', 'NT': 'EDGE', 'DL': 'EDGE',
+    'OLB': 'EDGE', 'ILB': 'EDGE', 'MLB': 'EDGE', 'LB': 'EDGE',
+    'CB': 'DB', 'S': 'DB', 'SS': 'DB', 'FS': 'DB', 'DB': 'DB',
 }
 
 DECADES = {
