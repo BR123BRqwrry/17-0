@@ -32,7 +32,7 @@ body {
 
 .screen { display: none; min-height: 100vh; width: 100%; }
 .screen.active { display: flex; }
-#draft-screen.active { display: flex; flex-direction: column; }
+#draft-screen.active { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
 /* ===== LANDING ===== */
 #landing-screen { align-items: center; justify-content: center; }
@@ -90,6 +90,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     flex: 1;
+    min-height: 0;
     overflow: hidden;
 }
 
@@ -99,6 +100,7 @@ body {
     border-right: 1px solid var(--border);
     overflow: hidden;
     position: relative;
+    min-height: 0;
 }
 
 .panel-controls {
@@ -155,7 +157,7 @@ body {
 .spin-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
 /* Player list */
-.player-list { flex: 1; overflow-y: auto; }
+.player-list { flex: 1; overflow-y: auto; min-height: 0; }
 .player-list::-webkit-scrollbar { width: 4px; }
 .player-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
