@@ -8,32 +8,28 @@ class SimulationEngine {
     }
 
     calculateTeamRating() {
-        let offenseRating = 0;
-        let defenseRating = 0;
         let synergyBonus = 0;
         let legacyBonus = 0;
         let balancePenalty = 0;
 
-        // Base ratings
-        const offPositions = ['QB', 'RB', 'WR1', 'WR2', 'TE', 'OL'];
-        const defPositions = ['EDGE', 'DB'];
+        // Position weights (QB most important, then playmakers)
+        const posWeights = {
+            'QB': 1.8, 'RB': 1.0, 'WR1': 1.3, 'WR2': 1.1, 'TE': 0.9, 'OL': 0.7,
+            'EDGE': 1.3, 'DB': 1.0
+        };
 
-        offPositions.forEach(pos => {
+        let totalWeight = 0;
+        let weightedSum = 0;
+
+        Object.entries(posWeights).forEach(([pos, weight]) => {
             const player = this.roster[pos];
-            if (player) offenseRating += player.rating;
+            if (player) {
+                weightedSum += player.rating * weight;
+                totalWeight += weight;
+            }
         });
 
-        defPositions.forEach(pos => {
-            const player = this.roster[pos];
-            if (player) defenseRating += player.rating;
-        });
-
-        // Normalize: offense has 6 players, defense has 2
-        offenseRating = offenseRating / 6;
-        defenseRating = defenseRating / 2;
-
-        // Weighted average (offense matters more in modern NFL)
-        let baseRating = (offenseRating * 0.65) + (defenseRating * 0.35);
+        let baseRating = weightedSum / totalWeight;
 
         // Legacy multiplier
         const allPlayers = Object.values(this.roster).filter(Boolean);
@@ -122,17 +118,17 @@ class SimulationEngine {
     }
 
     ratingToWins(rating) {
-        // Non-linear mapping — harder at the top
-        if (rating >= 99) return 17;
-        if (rating >= 97) return Math.random() > 0.4 ? 17 : 16;
-        if (rating >= 95) return Math.random() > 0.7 ? 16 : 15;
-        if (rating >= 93) return Math.random() > 0.5 ? 15 : 14;
-        if (rating >= 91) return Math.random() > 0.6 ? 14 : 13;
-        if (rating >= 89) return Math.random() > 0.5 ? 13 : 12;
-        if (rating >= 87) return Math.random() > 0.5 ? 12 : 11;
-        if (rating >= 85) return Math.random() > 0.5 ? 11 : 10;
-        if (rating >= 82) return Math.random() > 0.5 ? 10 : 9;
-        if (rating >= 79) return Math.random() > 0.5 ? 9 : 8;
+        // More generous curve — stacked teams go 17-0
+        if (rating >= 95) return 17;
+        if (rating >= 93) return Math.random() > 0.3 ? 17 : 16;
+        if (rating >= 91) return Math.random() > 0.4 ? 16 : 15;
+        if (rating >= 89) return Math.random() > 0.5 ? 15 : 14;
+        if (rating >= 87) return Math.random() > 0.5 ? 14 : 13;
+        if (rating >= 85) return Math.random() > 0.5 ? 13 : 12;
+        if (rating >= 83) return Math.random() > 0.5 ? 12 : 11;
+        if (rating >= 81) return Math.random() > 0.5 ? 11 : 10;
+        if (rating >= 79) return Math.random() > 0.5 ? 10 : 9;
+        if (rating >= 77) return Math.random() > 0.5 ? 9 : 8;
         if (rating >= 75) return Math.random() > 0.5 ? 8 : 7;
         return Math.max(3, Math.floor(rating / 10));
     }
