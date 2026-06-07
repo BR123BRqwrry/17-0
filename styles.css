@@ -42,15 +42,14 @@ body {
 .landing-modes { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
 .mode-row {
     display: flex; align-items: center; gap: 0.8rem;
-    padding: 1rem 1.4rem; background: var(--accent);
-    border: none; border-radius: var(--radius);
+    padding: 1rem 1.4rem; background: var(--bg3);
+    border: 1px solid var(--border); border-radius: var(--radius);
     cursor: pointer; transition: background 0.12s, transform 0.1s;
-    box-shadow: 0 2px 12px rgba(91, 156, 246, 0.25);
 }
-.mode-row:hover { background: #4a8be0; transform: translateY(-1px); }
-.mode-row strong { display: block; font-size: 1rem; font-weight: 500; color: white; }
-.mode-row span { font-size: 0.7rem; color: rgba(255,255,255,0.7); }
-.mode-arrow { color: rgba(255,255,255,0.8); font-size: 0.65rem; }
+.mode-row:hover { background: var(--bg4); transform: translateY(-1px); }
+.mode-row strong { display: block; font-size: 1rem; font-weight: 500; color: var(--text); }
+.mode-row span { font-size: 0.7rem; color: var(--text3); }
+.mode-arrow { color: var(--text3); font-size: 0.65rem; }
 .text-link { background: none; border: none; color: var(--text3); font-size: 0.75rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; font-family: var(--font); }
 .text-link:hover { color: var(--text2); }
 
