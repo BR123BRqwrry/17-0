@@ -59,9 +59,9 @@ class SimulationEngine {
             });
         }
 
-        // Era diversity bonus (spread across many decades = small bonus)
+        // Era diversity bonus (using all 3 available decades = bonus)
         const decades = [...new Set(allPlayers.map(p => p.decade))];
-        const eraBonus = decades.length >= 6 ? 1.5 : decades.length >= 5 ? 0.8 : 0;
+        const eraBonus = decades.length >= 3 ? 1.5 : decades.length >= 2 ? 0.5 : 0;
 
         // Era mismatch penalty (1960s QB with 2020s WR gets slight penalty)
         const qb = this.roster['QB'];

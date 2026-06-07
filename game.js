@@ -117,7 +117,7 @@ function renderPlayers() {
         filtered = filtered.filter(p => p.name.toLowerCase().includes(search));
     }
 
-    filtered.sort((a, b) => a.name.localeCompare(b.name));
+    filtered.sort((a, b) => b.rating - a.rating);
 
     document.getElementById('player-count').textContent = `${filtered.length} players available`;
 
