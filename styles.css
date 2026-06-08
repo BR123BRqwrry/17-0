@@ -117,6 +117,15 @@ body {
 .skip-btn:hover:not(:disabled) { background: var(--bg4); }
 .skip-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 .skip-btn span { opacity: 0.6; }
+.respin-btn {
+    font-family: var(--mono); font-size: 0.68rem;
+    padding: 0.3rem 0.6rem; background: var(--bg3);
+    border: 1px solid var(--border); border-radius: 4px;
+    color: var(--text2); cursor: pointer; transition: all 0.12s;
+}
+.respin-btn:hover:not(:disabled) { background: var(--bg4); border-color: var(--accent); color: var(--text); }
+.respin-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.respin-btn span { opacity: 0.7; font-size: 0.6rem; }
 .icon-btn {
     width: 26px; height: 26px; border-radius: 50%;
     border: 1px solid var(--border); background: var(--bg3);
@@ -362,6 +371,29 @@ body {
 .search-result-row:last-child { border-bottom: none; }
 .search-result-row .p-name { font-size: 0.85rem; font-weight: 500; }
 .search-result-row .p-meta { font-size: 0.72rem; color: var(--text2); }
+
+/* ===== SEO CONTENT ===== */
+.seo-content {
+    max-width: 680px; margin: 0 auto;
+    padding: 3rem 2rem 4rem;
+    border-top: 1px solid var(--border);
+}
+.seo-content h1 {
+    font-size: 1.4rem; font-weight: 700; margin-bottom: 0.8rem;
+    color: var(--text);
+}
+.seo-content h2 {
+    font-size: 1rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.5rem;
+    color: var(--text);
+}
+.seo-content p, .seo-content li {
+    font-size: 0.85rem; color: var(--text2); line-height: 1.7;
+}
+.seo-content ol, .seo-content ul {
+    padding-left: 1.2rem; margin-bottom: 0.8rem;
+}
+.seo-content li { margin-bottom: 0.4rem; }
+.seo-content strong { color: var(--text); }
 
 @media (max-width: 768px) {
     #draft-screen.active { height: auto; min-height: 100vh; overflow: auto; }
