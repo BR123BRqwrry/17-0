@@ -118,19 +118,17 @@ class SimulationEngine {
     }
 
     ratingToWins(rating) {
-        // More generous curve — stacked teams go 17-0
-        if (rating >= 95) return 17;
-        if (rating >= 93) return Math.random() > 0.3 ? 17 : 16;
-        if (rating >= 91) return Math.random() > 0.4 ? 16 : 15;
-        if (rating >= 89) return Math.random() > 0.5 ? 15 : 14;
-        if (rating >= 87) return Math.random() > 0.5 ? 14 : 13;
-        if (rating >= 85) return Math.random() > 0.5 ? 13 : 12;
-        if (rating >= 83) return Math.random() > 0.5 ? 12 : 11;
-        if (rating >= 81) return Math.random() > 0.5 ? 11 : 10;
-        if (rating >= 79) return Math.random() > 0.5 ? 10 : 9;
-        if (rating >= 77) return Math.random() > 0.5 ? 9 : 8;
-        if (rating >= 75) return Math.random() > 0.5 ? 8 : 7;
-        return Math.max(3, Math.floor(rating / 10));
+        if (rating >= 92) return 17;
+        if (rating >= 90) return Math.random() > 0.3 ? 17 : 16;
+        if (rating >= 88) return Math.random() > 0.4 ? 16 : 15;
+        if (rating >= 86) return Math.random() > 0.5 ? 15 : 14;
+        if (rating >= 84) return Math.random() > 0.5 ? 14 : 13;
+        if (rating >= 82) return Math.random() > 0.5 ? 13 : 12;
+        if (rating >= 80) return Math.random() > 0.5 ? 12 : 11;
+        if (rating >= 78) return Math.random() > 0.5 ? 11 : 10;
+        if (rating >= 76) return Math.random() > 0.5 ? 10 : 9;
+        if (rating >= 74) return Math.random() > 0.5 ? 9 : 8;
+        return Math.max(4, Math.floor(rating / 10));
     }
 
     simulateSeason() {
