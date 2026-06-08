@@ -447,6 +447,10 @@ def main():
             yrs = int(years_exp) if pd.notna(years_exp) else 1
             stats = {'YRS': yrs}
 
+        # Skip players with no stats (roster-only, never played)
+        if not stats:
+            continue
+
         # Calculate rating
         rating = calculate_rating(game_pos, stats)
 
@@ -567,17 +571,6 @@ const PLAYER_DB = [
 ];
 
 {synergies_js}
-
-function getRandomTeamForPosition(position, usedDecades) {{
-    const availableDecades = DECADES.filter(d => !usedDecades.includes(d));
-    if (availableDecades.length === 0) return null;
-
-    const decade = availableDecades[Math.floor(Math.random() * availableDecades.length)];
-    const teamsInDecade = [...new Set(PLAYER_DB.filter(p => p.decade === decade).map(p => p.team))];
-    const team = teamsInDecade[Math.floor(Math.random() * teamsInDecade.length)];
-
-    return {{ team, decade }};
-}}
 """
 
     with open('players.js', 'w', encoding='utf-8') as f:

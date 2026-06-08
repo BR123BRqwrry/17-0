@@ -67,7 +67,7 @@ function doSpin() {
     state.spinning = true;
     state.hasSpun = true;
 
-    const spin = getRandomTeamForPosition('ALL', state.usedTeamDecades);
+    const spin = getRandomSpin(state.usedTeamDecades);
     if (!spin) { state.spinning = false; return; }
     state.currentSpin = spin;
 
@@ -91,6 +91,20 @@ function doSpin() {
         document.getElementById('spin-overlay').classList.add('hidden');
         renderPlayers();
     }, 900);
+}
+
+function getRandomSpin(usedTeamDecades) {
+    const allCombos = [];
+    TEAMS.forEach(team => {
+        DECADES.forEach(decade => {
+            const key = `${team}_${decade}`;
+            if (!usedTeamDecades.includes(key)) {
+                allCombos.push({ team, decade });
+            }
+        });
+    });
+    if (allCombos.length === 0) return null;
+    return allCombos[Math.floor(Math.random() * allCombos.length)];
 }
 
 function getAllPlayersForSpin() {
