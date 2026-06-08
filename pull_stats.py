@@ -161,6 +161,17 @@ KNOWN_SYNERGIES = {
 }
 
 
+def normalize_name(name):
+    """Normalize player name for matching across datasets."""
+    if not isinstance(name, str):
+        return ''
+    n = name.strip()
+    n = n.replace('.', '')
+    n = n.replace(' Jr', '').replace(' Sr', '').replace(' III', '').replace(' II', '').replace(' IV', '')
+    n = n.replace("'", '').replace('’', '')
+    return n.lower().strip()
+
+
 def load_all_rosters():
     """Load roster data for all years 1999-2024."""
     all_rosters = []
@@ -297,6 +308,7 @@ def main():
     # Decade totals per player/team/decade (sum all seasons)
     print("Aggregating decade totals...")
     off_best = {}
+    off_best_norm = {}
     for (name, team, decade), group in off_seasons.groupby(['player_display_name', 'recent_team', 'decade']):
         pos = group['position'].iloc[0]
         totals = group[['passing_yards', 'passing_tds', 'completions', 'attempts',
@@ -304,6 +316,7 @@ def main():
                         'receiving_yards', 'receiving_tds', 'receptions']].sum()
         totals['position'] = pos
         off_best[(name, team, decade)] = totals
+        off_best_norm[(normalize_name(name), team, decade)] = totals
 
     # Aggregate defensive stats: best season per player per team per decade
     print("Processing defensive stats...")
@@ -317,11 +330,13 @@ def main():
     }).reset_index()
 
     def_best = {}
+    def_best_norm = {}
     for (name, team, decade), group in def_seasons.groupby(['player_display_name', 'team', 'decade']):
         pos = group['position'].iloc[0]
         totals = group[['def_sacks', 'def_fumbles_forced', 'def_interceptions', 'def_pass_defended', 'def_tackles']].sum()
         totals['position'] = pos
         def_best[(name, team, decade)] = totals
+        def_best_norm[(normalize_name(name), team, decade)] = totals
 
     # Now build the full player list from ROSTERS (every player who was active)
     print("\nBuilding player database from rosters...")
@@ -355,59 +370,66 @@ def main():
         if not game_pos:
             continue
 
-        # Build stats from stat data
+        # Build stats from stat data (try exact name, then normalized)
         stats = {}
         pos_list = [game_pos]
+        norm_key = (normalize_name(name), team_abbr, decade)
+        exact_key = (name, team_abbr, decade)
+
+        def get_off_stats():
+            if exact_key in off_best:
+                return off_best[exact_key]
+            if norm_key in off_best_norm:
+                return off_best_norm[norm_key]
+            return None
+
+        def get_def_stats():
+            if exact_key in def_best:
+                return def_best[exact_key]
+            if norm_key in def_best_norm:
+                return def_best_norm[norm_key]
+            return None
 
         if game_pos == 'QB':
-            key = (name, team_abbr, decade)
-            if key in off_best:
-                s = off_best[key]
-                if s['attempts'] > 0:
-                    stats = {
-                        'YDS': int(s['passing_yards']),
-                        'TD': int(s['passing_tds']),
-                        'CMP%': str(round(s['completions'] / s['attempts'] * 100, 1))
-                    }
+            s = get_off_stats()
+            if s is not None and s['attempts'] > 0:
+                stats = {
+                    'YDS': int(s['passing_yards']),
+                    'TD': int(s['passing_tds']),
+                    'CMP%': str(round(s['completions'] / s['attempts'] * 100, 1))
+                }
 
         elif game_pos == 'RB':
-            key = (name, team_abbr, decade)
-            if key in off_best:
-                s = off_best[key]
-                if s['carries'] > 0:
-                    stats = {
-                        'YDS': int(s['rushing_yards']),
-                        'TD': int(s['rushing_tds']),
-                        'YPC': str(round(s['rushing_yards'] / s['carries'], 1))
-                    }
+            s = get_off_stats()
+            if s is not None and s['carries'] > 0:
+                stats = {
+                    'YDS': int(s['rushing_yards']),
+                    'TD': int(s['rushing_tds']),
+                    'YPC': str(round(s['rushing_yards'] / s['carries'], 1))
+                }
 
         elif game_pos == 'WR1':
             pos_list = ['WR1', 'WR2']
-            key = (name, team_abbr, decade)
-            if key in off_best:
-                s = off_best[key]
-                if s['receptions'] > 0:
-                    stats = {
-                        'YDS': int(s['receiving_yards']),
-                        'TD': int(s['receiving_tds']),
-                        'YPR': str(round(s['receiving_yards'] / s['receptions'], 1))
-                    }
+            s = get_off_stats()
+            if s is not None and s['receptions'] > 0:
+                stats = {
+                    'YDS': int(s['receiving_yards']),
+                    'TD': int(s['receiving_tds']),
+                    'YPR': str(round(s['receiving_yards'] / s['receptions'], 1))
+                }
 
         elif game_pos == 'TE':
-            key = (name, team_abbr, decade)
-            if key in off_best:
-                s = off_best[key]
-                if s['receptions'] > 0:
-                    stats = {
-                        'YDS': int(s['receiving_yards']),
-                        'TD': int(s['receiving_tds']),
-                        'YPR': str(round(s['receiving_yards'] / s['receptions'], 1))
-                    }
+            s = get_off_stats()
+            if s is not None and s['receptions'] > 0:
+                stats = {
+                    'YDS': int(s['receiving_yards']),
+                    'TD': int(s['receiving_tds']),
+                    'YPR': str(round(s['receiving_yards'] / s['receptions'], 1))
+                }
 
         elif game_pos == 'EDGE':
-            key = (name, team_abbr, decade)
-            if key in def_best:
-                s = def_best[key]
+            s = get_def_stats()
+            if s is not None:
                 sacks = s['def_sacks']
                 sacks_str = str(int(sacks)) if sacks == int(sacks) else str(sacks)
                 stats = {'SACKS': sacks_str, 'FF': int(s['def_fumbles_forced'])}
@@ -415,9 +437,8 @@ def main():
                 stats = {'SACKS': '0', 'FF': 0}
 
         elif game_pos == 'DB':
-            key = (name, team_abbr, decade)
-            if key in def_best:
-                s = def_best[key]
+            s = get_def_stats()
+            if s is not None:
                 stats = {'INT': int(s['def_interceptions']), 'PD': int(s['def_pass_defended'])}
             else:
                 stats = {'INT': 0, 'PD': 0}
@@ -425,10 +446,6 @@ def main():
         elif game_pos == 'OL':
             yrs = int(years_exp) if pd.notna(years_exp) else 1
             stats = {'YRS': yrs}
-
-        # Skip players with no meaningful stats (except OL)
-        if not stats and game_pos != 'OL':
-            continue
 
         # Calculate rating
         rating = calculate_rating(game_pos, stats)
