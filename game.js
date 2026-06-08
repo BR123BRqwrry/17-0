@@ -39,7 +39,7 @@ function resetDraft() {
     // Reset pills to default
     document.getElementById('pill-team').textContent = '49ers';
     document.getElementById('pill-era').textContent = '1980s';
-    document.getElementById('topbar-round').textContent = 'Round 1/7';
+    document.getElementById('topbar-round').textContent = 'Round 1/8';
 
     // Reset field slots
     document.querySelectorAll('.field-slot').forEach(s => {
@@ -94,17 +94,13 @@ function doSpin() {
 }
 
 function getRandomSpin(usedTeamDecades) {
-    const allCombos = [];
-    TEAMS.forEach(team => {
-        DECADES.forEach(decade => {
-            const key = `${team}_${decade}`;
-            if (!usedTeamDecades.includes(key)) {
-                allCombos.push({ team, decade });
-            }
-        });
-    });
-    if (allCombos.length === 0) return null;
-    return allCombos[Math.floor(Math.random() * allCombos.length)];
+    const usedTeams = usedTeamDecades.map(td => td.split('_')[0]);
+    const availableTeams = TEAMS.filter(t => !usedTeams.includes(t));
+    if (availableTeams.length === 0) return null;
+
+    const team = availableTeams[Math.floor(Math.random() * availableTeams.length)];
+    const decade = DECADES[Math.floor(Math.random() * DECADES.length)];
+    return { team, decade };
 }
 
 function getAllPlayersForSpin() {
