@@ -277,7 +277,12 @@ def calculate_rating(pos, stats):
         return min(99, max(72, int(76 + int_score + pd_score)))
     elif pos == 'OL':
         yrs = stats.get('YRS', 0)
-        return min(95, max(72, int(75 + min(yrs, 12) * 1.5)))
+        draft = stats.get('DRAFT', 0)
+        base = 75 + min(yrs, 12) * 1.5
+        if draft > 0:
+            draft_bonus = max(0, (260 - draft) / 260) * 4
+            base += draft_bonus
+        return min(97, max(72, int(base)))
     return 78
 
 
@@ -347,6 +352,7 @@ def main():
     player_entries = rosters.groupby(['full_name', 'team', 'decade', 'position']).agg({
         'years_exp': 'max',
         'year': 'count',  # seasons on roster
+        'draft_number': 'min',
     }).reset_index()
     player_entries.rename(columns={'year': 'seasons_on_team'}, inplace=True)
 
@@ -361,6 +367,7 @@ def main():
         roster_pos = row['position']
         years_exp = row['years_exp']
         seasons = row['seasons_on_team']
+        draft_number = row['draft_number'] if pd.notna(row['draft_number']) else 0
 
         team_name = TEAM_MAP.get(team_abbr)
         if not team_name:
@@ -445,17 +452,23 @@ def main():
 
         elif game_pos == 'OL':
             yrs = int(years_exp) if pd.notna(years_exp) else 1
-            stats = {'YRS': yrs}
+            stats = {'YRS': yrs, 'DRAFT': int(draft_number)}
 
         # Skip players with no stats (roster-only, never played)
         if not stats:
             continue
 
-        # Calculate rating
-        rating = calculate_rating(game_pos, stats)
-
         # Badges
         badges = KNOWN_BADGES.get(name, [])
+
+        # Calculate rating (badges boost it)
+        rating = calculate_rating(game_pos, stats)
+        if 'HOF' in badges:
+            rating = min(99, rating + 4)
+        elif 'MVP' in badges or 'DPOY' in badges or 'SB MVP' in badges:
+            rating = min(99, rating + 3)
+        elif 'All-Pro' in badges:
+            rating = min(99, rating + 2)
 
         # Synergies
         synergies = []

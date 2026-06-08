@@ -147,7 +147,7 @@ function renderPlayers() {
         const posLabel = player.pos.map(p => p.replace('1', '').replace('2', '')).filter((v, i, a) => a.indexOf(v) === i).join(' · ');
 
         let statsHtml = '';
-        const entries = Object.entries(player.stats).filter(([k]) => k !== 'YRS');
+        const entries = Object.entries(player.stats).filter(([k]) => k !== 'YRS' && k !== 'DRAFT');
         if (entries.length > 0) {
             statsHtml = `<div class="p-stats">${entries.map(([k, v]) =>
                 `<div class="p-stat"><span class="p-stat-val">${v}</span><span class="p-stat-label">${k}</span></div>`
@@ -383,7 +383,7 @@ function globalSearch() {
 
     results.innerHTML = matches.map(p => {
         const posLabel = p.pos.map(x => x.replace('1', '').replace('2', '')).filter((v, i, a) => a.indexOf(v) === i).join('/');
-        const entries = Object.entries(p.stats).filter(([k]) => k !== 'YRS');
+        const entries = Object.entries(p.stats).filter(([k]) => k !== 'YRS' && k !== 'DRAFT');
         const statsStr = entries.length > 0 ? entries.map(([k, v]) => `${v} ${k}`).join(' · ') : '';
         return `<div class="search-result-row"><span class="p-name">${p.name}</span><span class="p-meta">${posLabel} · ${p.team} · ${p.decade}</span>${statsStr ? `<span class="p-meta">${statsStr}</span>` : ''}</div>`;
     }).join('');
