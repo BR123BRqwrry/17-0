@@ -98,9 +98,14 @@ function getRandomSpin(usedTeamDecades) {
     const availableTeams = TEAMS.filter(t => !usedTeams.includes(t));
     if (availableTeams.length === 0) return null;
 
-    const team = availableTeams[Math.floor(Math.random() * availableTeams.length)];
-    const decade = DECADES[Math.floor(Math.random() * DECADES.length)];
-    return { team, decade };
+    // Build all valid combos and pick one uniformly
+    const combos = [];
+    availableTeams.forEach(team => {
+        DECADES.forEach(decade => {
+            combos.push({ team, decade });
+        });
+    });
+    return combos[Math.floor(Math.random() * combos.length)];
 }
 
 function getAllPlayersForSpin() {
