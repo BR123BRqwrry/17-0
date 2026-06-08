@@ -45,17 +45,19 @@
     <div id="app">
         <!-- Landing Screen -->
         <div id="landing-screen" class="screen active">
+            <div class="landing-field-bg"></div>
             <div class="landing-wrap">
-                <div class="landing-logo">17–0</div>
-                <p class="landing-desc">Draft an all-time NFL roster — one legend per era — and the sim projects your 17-game season.</p>
-                <div class="landing-modes">
-                    <div class="mode-row" onclick="startGame('scout')">
-                        <span class="mode-arrow">&#9654;</span>
-                        <div><strong>Play</strong><span>Draft your legends</span></div>
-                    </div>
+                <div class="landing-header">
+                    <div class="landing-logo">17–0</div>
+                    <div class="landing-tagline">DRAFT LEGENDS. SIMULATE PERFECTION.</div>
                 </div>
-                <button class="text-link" onclick="openModal('rules-modal')">How to play</button>
-                <button class="text-link" onclick="openModal('search-modal')">Search players</button>
+                <p class="landing-desc">Pick one NFL star per spin across 2000s–2020s. Fill 8 roster slots. A hidden engine sims your 17-game season.</p>
+                <button class="landing-play-btn" onclick="startGame('scout')">DRAFT</button>
+                <div class="landing-links">
+                    <button class="text-link" onclick="openModal('rules-modal')">Rules</button>
+                    <span class="landing-dot"></span>
+                    <button class="text-link" onclick="openModal('search-modal')">Players</button>
+                </div>
             </div>
         </div>
 

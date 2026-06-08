@@ -8,12 +8,14 @@ import pandas as pd
 import json
 
 TEAM_MAP = {
-    'ARI': 'Cardinals', 'ATL': 'Falcons', 'BAL': 'Ravens', 'BUF': 'Bills',
-    'CAR': 'Panthers', 'CHI': 'Bears', 'CIN': 'Bengals', 'CLE': 'Browns',
+    'ARI': 'Cardinals', 'ARZ': 'Cardinals', 'ATL': 'Falcons',
+    'BAL': 'Ravens', 'BLT': 'Ravens', 'BUF': 'Bills',
+    'CAR': 'Panthers', 'CHI': 'Bears', 'CIN': 'Bengals',
+    'CLE': 'Browns', 'CLV': 'Browns',
     'DAL': 'Cowboys', 'DEN': 'Broncos', 'DET': 'Lions', 'GB': 'Packers',
-    'HOU': 'Texans', 'IND': 'Colts', 'JAX': 'Jaguars', 'KC': 'Chiefs',
+    'HOU': 'Texans', 'HST': 'Texans', 'IND': 'Colts', 'JAX': 'Jaguars', 'KC': 'Chiefs',
     'LV': 'Raiders', 'OAK': 'Raiders', 'LAC': 'Chargers', 'SD': 'Chargers',
-    'LA': 'Rams', 'LAR': 'Rams', 'STL': 'Rams', 'MIA': 'Dolphins',
+    'LA': 'Rams', 'LAR': 'Rams', 'STL': 'Rams', 'SL': 'Rams', 'MIA': 'Dolphins',
     'MIN': 'Vikings', 'NE': 'Patriots', 'NO': 'Saints', 'NYG': 'Giants',
     'NYJ': 'Jets', 'PHI': 'Eagles', 'PIT': 'Steelers', 'SF': '49ers',
     'SEA': 'Seahawks', 'TB': 'Buccaneers', 'TEN': 'Titans', 'WAS': 'Commanders',
