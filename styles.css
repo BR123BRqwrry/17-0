@@ -312,6 +312,17 @@ body {
 .toast.show { transform: translateX(-50%) translateY(0); }
 
 /* ===== RESPONSIVE ===== */
+.search-result-row {
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+.search-result-row:last-child { border-bottom: none; }
+.search-result-row .p-name { font-size: 0.85rem; font-weight: 500; }
+.search-result-row .p-meta { font-size: 0.72rem; color: var(--text2); }
+
 @media (max-width: 768px) {
     .draft-body { grid-template-columns: 1fr; }
     .field-panel { min-height: 300px; border-top: 1px solid var(--border); }

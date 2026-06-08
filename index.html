@@ -32,6 +32,7 @@
                     </div>
                 </div>
                 <button class="text-link" onclick="openModal('rules-modal')">How to play</button>
+                <button class="text-link" onclick="openModal('search-modal')">Search players</button>
             </div>
         </div>
 
@@ -181,6 +182,16 @@
                     </ul>
                     <p class="modal-note">2 team skips + 2 era rerolls per game.</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- Search Modal -->
+        <div class="modal" id="search-modal">
+            <div class="modal-box" style="max-width:500px; max-height:80vh; display:flex; flex-direction:column;">
+                <button class="modal-x" onclick="closeModal('search-modal')">&times;</button>
+                <h3>Search Players</h3>
+                <input type="text" class="search-input" id="global-search" placeholder="Type a player name..." oninput="globalSearch()" style="margin-top:0.8rem;">
+                <div id="global-search-results" style="overflow-y:auto; margin-top:0.8rem; flex:1; min-height:0;"></div>
             </div>
         </div>
 

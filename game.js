@@ -358,6 +358,22 @@ function copyShareLink() {
     }
 }
 
+function globalSearch() {
+    const query = document.getElementById('global-search').value.toLowerCase().trim();
+    const results = document.getElementById('global-search-results');
+    if (query.length < 2) { results.innerHTML = '<p style="color:var(--text2); font-size:0.8rem;">Type at least 2 characters</p>'; return; }
+
+    const matches = PLAYER_DB.filter(p => p.name.toLowerCase().includes(query)).slice(0, 50);
+    if (matches.length === 0) { results.innerHTML = '<p style="color:var(--text2); font-size:0.8rem;">No players found</p>'; return; }
+
+    results.innerHTML = matches.map(p => {
+        const posLabel = p.pos.map(x => x.replace('1', '').replace('2', '')).filter((v, i, a) => a.indexOf(v) === i).join('/');
+        const entries = Object.entries(p.stats).filter(([k]) => k !== 'YRS');
+        const statsStr = entries.length > 0 ? entries.map(([k, v]) => `${v} ${k}`).join(' · ') : '';
+        return `<div class="search-result-row"><span class="p-name">${p.name}</span><span class="p-meta">${posLabel} · ${p.team} · ${p.decade}</span>${statsStr ? `<span class="p-meta">${statsStr}</span>` : ''}</div>`;
+    }).join('');
+}
+
 function showShareConfirm(msg) {
     const el = document.getElementById('share-confirm');
     el.textContent = msg;
