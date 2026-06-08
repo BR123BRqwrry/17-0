@@ -118,9 +118,10 @@ class SimulationEngine {
     }
 
     ratingToWins(rating) {
-        if (rating >= 92) return 17;
-        if (rating >= 90) return Math.random() > 0.3 ? 17 : 16;
-        if (rating >= 88) return Math.random() > 0.4 ? 16 : 15;
+        if (rating >= 94) return 17;
+        if (rating >= 92) return Math.random() > 0.4 ? 17 : 16;
+        if (rating >= 90) return Math.random() > 0.5 ? 16 : 15;
+        if (rating >= 88) return Math.random() > 0.5 ? 15 : 14;
         if (rating >= 86) return Math.random() > 0.5 ? 15 : 14;
         if (rating >= 84) return Math.random() > 0.5 ? 14 : 13;
         if (rating >= 82) return Math.random() > 0.5 ? 13 : 12;
