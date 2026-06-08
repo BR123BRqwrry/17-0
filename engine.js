@@ -34,10 +34,10 @@ class SimulationEngine {
         // Legacy multiplier
         const allPlayers = Object.values(this.roster).filter(Boolean);
         allPlayers.forEach(player => {
-            if (player.badges.includes('HOF')) legacyBonus += 0.8;
-            if (player.badges.includes('MVP')) legacyBonus += 1.2;
-            if (player.badges.includes('DPOY')) legacyBonus += 0.9;
-            if (player.badges.includes('SB MVP')) legacyBonus += 0.7;
+            if (player.badges.includes('HOF')) legacyBonus += 0.5;
+            if (player.badges.includes('MVP')) legacyBonus += 0.8;
+            if (player.badges.includes('DPOY')) legacyBonus += 0.6;
+            if (player.badges.includes('SB MVP')) legacyBonus += 0.4;
         });
 
         // Synergy calculation
@@ -47,8 +47,8 @@ class SimulationEngine {
         const ratings = allPlayers.map(p => p.rating);
         const minRating = Math.min(...ratings);
         const avgRating = ratings.reduce((a, b) => a + b, 0) / ratings.length;
-        if (minRating < avgRating - 8) {
-            balancePenalty = (avgRating - minRating - 8) * 0.3;
+        if (minRating < avgRating - 5) {
+            balancePenalty = (avgRating - minRating - 5) * 0.45;
             this.penalties.push({
                 label: `Weakest link: ${allPlayers.find(p => p.rating === minRating).name}`,
                 value: -balancePenalty.toFixed(1)
@@ -57,7 +57,7 @@ class SimulationEngine {
 
         // Era diversity bonus (using all 3 available decades = bonus)
         const decades = [...new Set(allPlayers.map(p => p.decade))];
-        const eraBonus = decades.length >= 3 ? 1.5 : decades.length >= 2 ? 0.5 : 0;
+        const eraBonus = decades.length >= 3 ? 1.0 : decades.length >= 2 ? 0.3 : 0;
 
         // Era mismatch penalty (1960s QB with 2020s WR gets slight penalty)
         const qb = this.roster['QB'];
@@ -118,18 +118,18 @@ class SimulationEngine {
     }
 
     ratingToWins(rating) {
-        if (rating >= 94) return 17;
-        if (rating >= 92) return Math.random() > 0.4 ? 17 : 16;
-        if (rating >= 90) return Math.random() > 0.5 ? 16 : 15;
-        if (rating >= 88) return Math.random() > 0.5 ? 15 : 14;
-        if (rating >= 86) return Math.random() > 0.5 ? 15 : 14;
-        if (rating >= 84) return Math.random() > 0.5 ? 14 : 13;
-        if (rating >= 82) return Math.random() > 0.5 ? 13 : 12;
-        if (rating >= 80) return Math.random() > 0.5 ? 12 : 11;
-        if (rating >= 78) return Math.random() > 0.5 ? 11 : 10;
-        if (rating >= 76) return Math.random() > 0.5 ? 10 : 9;
-        if (rating >= 74) return Math.random() > 0.5 ? 9 : 8;
-        return Math.max(4, Math.floor(rating / 10));
+        if (rating >= 96) return 17;
+        if (rating >= 94) return Math.random() > 0.5 ? 17 : 16;
+        if (rating >= 92) return Math.random() > 0.6 ? 16 : 15;
+        if (rating >= 90) return Math.random() > 0.5 ? 15 : 14;
+        if (rating >= 88) return Math.random() > 0.5 ? 14 : 13;
+        if (rating >= 86) return Math.random() > 0.5 ? 13 : 12;
+        if (rating >= 84) return Math.random() > 0.5 ? 12 : 11;
+        if (rating >= 82) return Math.random() > 0.5 ? 11 : 10;
+        if (rating >= 80) return Math.random() > 0.5 ? 10 : 9;
+        if (rating >= 78) return Math.random() > 0.5 ? 9 : 8;
+        if (rating >= 76) return Math.random() > 0.5 ? 8 : 7;
+        return Math.max(3, Math.floor(rating / 12));
     }
 
     simulateSeason() {
