@@ -19,6 +19,14 @@ TEAM_MAP = {
     'SEA': 'Seahawks', 'TB': 'Buccaneers', 'TEN': 'Titans', 'WAS': 'Commanders',
 }
 
+# Map old team abbreviations to the ones used in stat files
+TEAM_ABBR_NORMALIZE = {
+    'SD': 'LAC',
+    'OAK': 'LV',
+    'STL': 'LA',
+    'LAR': 'LA',
+}
+
 GAME_POS_MAP = {
     'QB': 'QB', 'RB': 'RB', 'FB': 'RB',
     'WR': 'WR1', 'TE': 'TE',
@@ -377,24 +385,35 @@ def main():
         if not game_pos:
             continue
 
-        # Build stats from stat data (try exact name, then normalized)
+        # Build stats from stat data (try exact name, then normalized, then alt team abbrev)
         stats = {}
         pos_list = [game_pos]
-        norm_key = (normalize_name(name), team_abbr, decade)
+        stat_team = TEAM_ABBR_NORMALIZE.get(team_abbr, team_abbr)
         exact_key = (name, team_abbr, decade)
+        alt_key = (name, stat_team, decade)
+        norm_key = (normalize_name(name), team_abbr, decade)
+        norm_alt_key = (normalize_name(name), stat_team, decade)
 
         def get_off_stats():
             if exact_key in off_best:
                 return off_best[exact_key]
+            if alt_key in off_best:
+                return off_best[alt_key]
             if norm_key in off_best_norm:
                 return off_best_norm[norm_key]
+            if norm_alt_key in off_best_norm:
+                return off_best_norm[norm_alt_key]
             return None
 
         def get_def_stats():
             if exact_key in def_best:
                 return def_best[exact_key]
+            if alt_key in def_best:
+                return def_best[alt_key]
             if norm_key in def_best_norm:
                 return def_best_norm[norm_key]
+            if norm_alt_key in def_best_norm:
+                return def_best_norm[norm_alt_key]
             return None
 
         if game_pos == 'QB':
