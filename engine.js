@@ -31,14 +31,16 @@ class SimulationEngine {
 
         let baseRating = weightedSum / totalWeight;
 
-        // Legacy multiplier
+        // Legacy multiplier (capped — stacking legends has diminishing returns)
         const allPlayers = Object.values(this.roster).filter(Boolean);
+        let rawLegacy = 0;
         allPlayers.forEach(player => {
-            if (player.badges.includes('HOF')) legacyBonus += 0.5;
-            if (player.badges.includes('MVP')) legacyBonus += 0.8;
-            if (player.badges.includes('DPOY')) legacyBonus += 0.6;
-            if (player.badges.includes('SB MVP')) legacyBonus += 0.4;
+            if (player.badges.includes('HOF')) rawLegacy += 0.4;
+            if (player.badges.includes('MVP')) rawLegacy += 0.6;
+            if (player.badges.includes('DPOY')) rawLegacy += 0.5;
+            if (player.badges.includes('SB MVP')) rawLegacy += 0.3;
         });
+        legacyBonus = Math.min(rawLegacy, 2.5);
 
         // Synergy calculation
         synergyBonus = this.calculateSynergies();
@@ -118,18 +120,18 @@ class SimulationEngine {
     }
 
     ratingToWins(rating) {
-        if (rating >= 96) return 17;
-        if (rating >= 94) return Math.random() > 0.5 ? 17 : 16;
-        if (rating >= 92) return Math.random() > 0.6 ? 16 : 15;
-        if (rating >= 90) return Math.random() > 0.5 ? 15 : 14;
-        if (rating >= 88) return Math.random() > 0.5 ? 14 : 13;
-        if (rating >= 86) return Math.random() > 0.5 ? 13 : 12;
-        if (rating >= 84) return Math.random() > 0.5 ? 12 : 11;
-        if (rating >= 82) return Math.random() > 0.5 ? 11 : 10;
-        if (rating >= 80) return Math.random() > 0.5 ? 10 : 9;
-        if (rating >= 78) return Math.random() > 0.5 ? 9 : 8;
-        if (rating >= 76) return Math.random() > 0.5 ? 8 : 7;
-        return Math.max(3, Math.floor(rating / 12));
+        if (rating >= 97) return 17;
+        if (rating >= 95) return Math.random() > 0.65 ? 17 : 16;
+        if (rating >= 93) return Math.random() > 0.5 ? 16 : 15;
+        if (rating >= 91) return Math.random() > 0.5 ? 14 : 13;
+        if (rating >= 89) return Math.random() > 0.5 ? 13 : 12;
+        if (rating >= 87) return Math.random() > 0.5 ? 12 : 11;
+        if (rating >= 85) return Math.random() > 0.5 ? 11 : 10;
+        if (rating >= 83) return Math.random() > 0.5 ? 10 : 9;
+        if (rating >= 81) return Math.random() > 0.5 ? 9 : 8;
+        if (rating >= 79) return Math.random() > 0.5 ? 8 : 7;
+        if (rating >= 77) return Math.random() > 0.5 ? 7 : 6;
+        return Math.max(3, Math.floor(rating / 14));
     }
 
     simulateSeason() {
