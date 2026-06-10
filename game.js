@@ -1,15 +1,50 @@
 let state = {
+    gameMode: 'nfl',
     mode: 'scout',
     round: 0,
     roster: {},
-    usedDecades: [],
-    usedTeamDecades: [],
+    usedEras: [],
+    usedTeamEras: [],
     rerolls: 2,
     currentSpin: null,
     selectedPlayer: null,
     spinning: false,
     hasSpun: false,
 };
+
+let selectedGameMode = 'nfl';
+
+function selectMode(mode) {
+    selectedGameMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`.mode-${mode}`).classList.add('active');
+}
+
+function getTeams() {
+    return state.gameMode === 'cfb' ? CFB_TEAMS : TEAMS;
+}
+
+function getEras() {
+    return state.gameMode === 'cfb' ? CFB_YEARS : DECADES;
+}
+
+function getPlayerDB() {
+    return state.gameMode === 'cfb' ? CFB_PLAYER_DB : PLAYER_DB;
+}
+
+function getSynergies() {
+    return state.gameMode === 'cfb' ? CFB_SYNERGIES : SYNERGIES;
+}
+
+function getEraKey(player) {
+    return state.gameMode === 'cfb' ? player.year : player.decade;
+}
+
+function getPosOrder() {
+    return state.gameMode === 'cfb'
+        ? ['QB', 'RB', 'WR1', 'WR2', 'TE', 'EDGE', 'DB']
+        : ['QB', 'RB', 'WR1', 'WR2', 'TE', 'OL', 'EDGE', 'DB'];
+}
 
 const POS_ORDER = ['QB', 'RB', 'WR1', 'WR2', 'TE', 'OL', 'EDGE', 'DB'];
 
@@ -18,13 +53,14 @@ function show(id) {
     document.getElementById(id).classList.add('active');
 }
 
-function startGame(mode) {
+function startGame() {
     state = {
-        mode,
+        gameMode: selectedGameMode,
+        mode: 'scout',
         round: 0,
         roster: {},
-        usedDecades: [],
-        usedTeamDecades: [],
+        usedEras: [],
+        usedTeamEras: [],
         rerolls: 2,
         currentSpin: null,
         selectedPlayer: null,
@@ -36,10 +72,14 @@ function startGame(mode) {
 }
 
 function resetDraft() {
+    const teams = getTeams();
+    const eras = getEras();
+    const totalRounds = getPosOrder().length;
+
     // Reset pills to default
-    document.getElementById('pill-team').textContent = '49ers';
-    document.getElementById('pill-era').textContent = '1980s';
-    document.getElementById('topbar-round').textContent = 'Round 1/8';
+    document.getElementById('pill-team').textContent = teams[0] || 'Team';
+    document.getElementById('pill-era').textContent = state.gameMode === 'cfb' ? eras[0] : eras[0];
+    document.getElementById('topbar-round').textContent = `Round 1/${totalRounds}`;
 
     // Reset field slots
     document.querySelectorAll('.field-slot').forEach(s => {
@@ -47,13 +87,21 @@ function resetDraft() {
         s.querySelector('.slot-name').textContent = '';
     });
 
+    // Hide OL slot in CFB mode (only 7 positions)
+    const olSlot = document.getElementById('slot-OL');
+    if (olSlot) {
+        olSlot.style.display = state.gameMode === 'cfb' ? 'none' : 'flex';
+    }
+
     // Show spin overlay, hide player list
     document.getElementById('spin-overlay').classList.remove('hidden');
     document.getElementById('player-list').innerHTML = '';
     document.getElementById('player-count').textContent = '';
     document.getElementById('placement-msg').textContent = 'Click a player, then a position';
 
-    // No reroll button anymore
+    // Reset respin button
+    document.getElementById('respin-btn').disabled = true;
+    document.getElementById('respin-count').textContent = state.rerolls;
 
     // Reset filters
     document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
@@ -67,7 +115,10 @@ function doSpin() {
     state.spinning = true;
     state.hasSpun = true;
 
-    const spin = getRandomSpin(state.usedTeamDecades);
+    const teams = getTeams();
+    const eras = getEras();
+
+    const spin = getRandomSpin(state.usedTeamEras);
     if (!spin) { state.spinning = false; return; }
     state.currentSpin = spin;
 
@@ -76,33 +127,76 @@ function doSpin() {
 
     let count = 0;
     const cycle = setInterval(() => {
-        teamEl.textContent = TEAMS[Math.floor(Math.random() * TEAMS.length)];
-        eraEl.textContent = DECADES[Math.floor(Math.random() * DECADES.length)];
+        teamEl.textContent = teams[Math.floor(Math.random() * teams.length)];
+        eraEl.textContent = eras[Math.floor(Math.random() * eras.length)];
         count++;
     }, 50);
 
     setTimeout(() => {
         clearInterval(cycle);
         teamEl.textContent = spin.team;
-        eraEl.textContent = spin.decade;
+        eraEl.textContent = spin.era;
         state.spinning = false;
 
         // Hide spin overlay, show players
         document.getElementById('spin-overlay').classList.add('hidden');
         renderPlayers();
+
+        // Enable respin if available
+        const respinBtn = document.getElementById('respin-btn');
+        respinBtn.disabled = state.rerolls <= 0;
     }, 900);
 }
 
-function getRandomSpin(usedTeamDecades) {
-    const usedTeams = usedTeamDecades.map(td => td.split('_')[0]);
-    const availableTeams = TEAMS.filter(t => !usedTeams.includes(t));
+function doRespin() {
+    if (state.rerolls <= 0 || state.spinning) return;
+    state.rerolls--;
+    document.getElementById('respin-count').textContent = state.rerolls;
+
+    const teams = getTeams();
+    const eras = getEras();
+
+    state.spinning = true;
+    const spin = getRandomSpin(state.usedTeamEras);
+    if (!spin) { state.spinning = false; return; }
+    state.currentSpin = spin;
+
+    const teamEl = document.getElementById('pill-team');
+    const eraEl = document.getElementById('pill-era');
+
+    let count = 0;
+    const cycle = setInterval(() => {
+        teamEl.textContent = teams[Math.floor(Math.random() * teams.length)];
+        eraEl.textContent = eras[Math.floor(Math.random() * eras.length)];
+        count++;
+    }, 50);
+
+    setTimeout(() => {
+        clearInterval(cycle);
+        teamEl.textContent = spin.team;
+        eraEl.textContent = spin.era;
+        state.spinning = false;
+
+        renderPlayers();
+
+        const respinBtn = document.getElementById('respin-btn');
+        respinBtn.disabled = state.rerolls <= 0;
+    }, 900);
+}
+
+function getRandomSpin(usedTeamEras) {
+    const teams = getTeams();
+    const eras = getEras();
+
+    const usedTeams = usedTeamEras.map(td => td.split('_')[0]);
+    const availableTeams = teams.filter(t => !usedTeams.includes(t));
     if (availableTeams.length === 0) return null;
 
     // Build all valid combos and pick one uniformly
     const combos = [];
     availableTeams.forEach(team => {
-        DECADES.forEach(decade => {
-            combos.push({ team, decade });
+        eras.forEach(era => {
+            combos.push({ team, era });
         });
     });
     return combos[Math.floor(Math.random() * combos.length)];
@@ -110,8 +204,14 @@ function getRandomSpin(usedTeamDecades) {
 
 function getAllPlayersForSpin() {
     if (!state.currentSpin) return [];
-    const { team, decade } = state.currentSpin;
-    return PLAYER_DB.filter(p => p.team === team && p.decade === decade);
+    const { team, era } = state.currentSpin;
+    const db = getPlayerDB();
+
+    if (state.gameMode === 'cfb') {
+        return db.filter(p => p.team === team && p.year === era);
+    } else {
+        return db.filter(p => p.team === team && p.decade === era);
+    }
 }
 
 function renderPlayers() {
@@ -228,10 +328,12 @@ document.addEventListener('click', (e) => {
 
 function placePlayer(player, pos) {
     state.roster[pos] = player;
-    state.usedDecades.push(state.currentSpin.decade);
-    state.usedTeamDecades.push(`${state.currentSpin.team}_${state.currentSpin.decade}`);
+    state.usedEras.push(state.currentSpin.era);
+    state.usedTeamEras.push(`${state.currentSpin.team}_${state.currentSpin.era}`);
     state.round++;
     state.selectedPlayer = null;
+
+    const totalRounds = getPosOrder().length;
 
     // Update slot
     const slot = document.getElementById(`slot-${pos}`);
@@ -242,14 +344,14 @@ function placePlayer(player, pos) {
     // Remove highlights
     document.querySelectorAll('.field-slot').forEach(s => s.classList.remove('highlight'));
 
-    // Check if done (8 positions now)
-    if (state.round >= 8) {
+    // Check if done
+    if (state.round >= totalRounds) {
         setTimeout(runSim, 500);
         return;
     }
 
     // Update round
-    document.getElementById('topbar-round').textContent = `Round ${state.round + 1}/8`;
+    document.getElementById('topbar-round').textContent = `Round ${state.round + 1}/${totalRounds}`;
 
     // Show spin overlay for next round
     document.getElementById('spin-overlay').classList.remove('hidden');
@@ -257,6 +359,7 @@ function placePlayer(player, pos) {
     document.getElementById('player-count').textContent = '';
     document.getElementById('placement-msg').textContent = 'Click a player, then a position';
     document.getElementById('search-input').value = '';
+    document.getElementById('respin-btn').disabled = true;
 }
 
 // Filter tabs
@@ -276,7 +379,7 @@ function filterPlayers() {
 // Simulation
 function runSim() {
     show('sim-screen');
-    const engine = new SimulationEngine(state.roster);
+    const engine = new SimulationEngine(state.roster, state.gameMode);
     const result = engine.simulateSeason();
 
     const grid = document.getElementById('sim-grid');
@@ -315,11 +418,13 @@ function showResults(result) {
 
     const roster = document.getElementById('result-roster');
     roster.innerHTML = '';
-    POS_ORDER.forEach(pos => {
+    const posOrder = getPosOrder();
+    posOrder.forEach((pos, idx) => {
         const p = state.roster[pos];
         if (!p) return;
         const dp = pos.replace('1', '').replace('2', '');
-        roster.innerHTML += `<div class="rr-item"><span class="rr-pos">${dp}</span><span class="rr-name">${p.name}</span><span class="rr-meta">${state.usedDecades[POS_ORDER.indexOf(pos)]} ${p.team}</span></div>`;
+        const eraLabel = state.usedEras[idx] || '';
+        roster.innerHTML += `<div class="rr-item"><span class="rr-pos">${dp}</span><span class="rr-name">${p.name}</span><span class="rr-meta">${eraLabel} ${p.team}</span></div>`;
     });
 
     const bonuses = document.getElementById('result-bonuses');
@@ -378,14 +483,23 @@ function globalSearch() {
     const results = document.getElementById('global-search-results');
     if (query.length < 2) { results.innerHTML = '<p style="color:var(--text2); font-size:0.8rem;">Type at least 2 characters</p>'; return; }
 
-    const matches = PLAYER_DB.filter(p => p.name.toLowerCase().includes(query)).slice(0, 50);
-    if (matches.length === 0) { results.innerHTML = '<p style="color:var(--text2); font-size:0.8rem;">No players found</p>'; return; }
+    // Search both databases
+    const nflMatches = PLAYER_DB.filter(p => p.name.toLowerCase().includes(query)).slice(0, 25);
+    const cfbMatches = (typeof CFB_PLAYER_DB !== 'undefined' ? CFB_PLAYER_DB : []).filter(p => p.name.toLowerCase().includes(query)).slice(0, 25);
 
-    results.innerHTML = matches.map(p => {
+    const allMatches = [
+        ...nflMatches.map(p => ({...p, source: 'NFL'})),
+        ...cfbMatches.map(p => ({...p, source: 'CFB'}))
+    ].slice(0, 50);
+
+    if (allMatches.length === 0) { results.innerHTML = '<p style="color:var(--text2); font-size:0.8rem;">No players found</p>'; return; }
+
+    results.innerHTML = allMatches.map(p => {
         const posLabel = p.pos.map(x => x.replace('1', '').replace('2', '')).filter((v, i, a) => a.indexOf(v) === i).join('/');
         const entries = Object.entries(p.stats).filter(([k]) => k !== 'YRS' && k !== 'DRAFT');
         const statsStr = entries.length > 0 ? entries.map(([k, v]) => `${v} ${k}`).join(' · ') : '';
-        return `<div class="search-result-row"><span class="p-name">${p.name}</span><span class="p-meta">${posLabel} · ${p.team} · ${p.decade}</span>${statsStr ? `<span class="p-meta">${statsStr}</span>` : ''}</div>`;
+        const era = p.decade || p.year || '';
+        return `<div class="search-result-row"><span class="p-name">${p.name}</span><span class="p-meta">${p.source} · ${posLabel} · ${p.team} · ${era}</span>${statsStr ? `<span class="p-meta">${statsStr}</span>` : ''}</div>`;
     }).join('');
 }
 

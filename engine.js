@@ -1,8 +1,9 @@
 // Simulation Engine — hidden, non-linear rating system
 
 class SimulationEngine {
-    constructor(roster) {
+    constructor(roster, gameMode = 'nfl') {
         this.roster = roster;
+        this.gameMode = gameMode;
         this.activeSynergies = [];
         this.penalties = [];
     }
@@ -101,7 +102,9 @@ class SimulationEngine {
         const playerNames = allPlayers.map(p => p.name);
         let totalBonus = 0;
 
-        for (const [key, synergy] of Object.entries(SYNERGIES)) {
+        const synergiesDb = this.gameMode === 'cfb' ? (typeof CFB_SYNERGIES !== 'undefined' ? CFB_SYNERGIES : {}) : SYNERGIES;
+
+        for (const [key, synergy] of Object.entries(synergiesDb)) {
             const matchedPlayers = synergy.players.filter(p => playerNames.includes(p));
             if (matchedPlayers.length >= 2) {
                 // Scale bonus by how many of the synergy players are present

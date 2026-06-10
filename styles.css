@@ -66,6 +66,23 @@ body {
     font-size: 0.82rem; color: var(--text2); line-height: 1.65;
     margin-bottom: 2.2rem;
 }
+/* Mode selector */
+.mode-select {
+    display: flex; gap: 0.8rem; justify-content: center; margin-bottom: 1.8rem;
+}
+.mode-btn {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1rem 1.5rem; border-radius: var(--radius);
+    background: var(--bg2); border: 2px solid var(--border);
+    cursor: pointer; transition: all 0.15s; min-width: 130px;
+}
+.mode-btn:hover { border-color: var(--text3); background: var(--bg3); }
+.mode-btn.active { border-color: var(--accent); background: var(--accent-dim); }
+.mode-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+.mode-label { font-family: var(--mono); font-size: 0.9rem; font-weight: 600; color: var(--text); letter-spacing: 0.05em; }
+.mode-sub { font-size: 0.6rem; color: var(--text3); margin-top: 0.2rem; }
+.mode-btn.active .mode-label { color: var(--accent); }
+
 .landing-play-btn {
     font-family: var(--mono); font-size: 0.85rem; font-weight: 600;
     letter-spacing: 0.15em;

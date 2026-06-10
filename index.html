@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>17-0 Game — Build a 17-0 Team | NFL Draft Simulator</title>
-    <meta name="description" content="Play the 17-0 game: spin a random NFL team and decade, draft real players from 2000s-2020s, and simulate a 17-game season. 3,000+ real players with hidden ratings. Can you build a 17-0 team?">
-    <meta name="keywords" content="17-0 game, build a 17-0 team, NFL draft game, NFL draft simulator, perfect season game, NFL roster builder, football simulation game, 17-0 NFL">
+    <title>17-0 Game — Build a 17-0 Team | NFL & College Football Draft Simulator</title>
+    <meta name="description" content="Play the 17-0 game: spin a random NFL or college football team, draft real players, and simulate a perfect season. 3,000+ NFL players from 2000s-2020s plus Power 4 CFB stars. Can you go 17-0?">
+    <meta name="keywords" content="17-0 game, build a 17-0 team, NFL draft game, NFL draft simulator, college football draft game, CFB draft simulator, perfect season game, football simulation game, 17-0 NFL, 17-0 college football">
     <link rel="canonical" href="https://17-0game.com/">
-    <meta property="og:title" content="17-0 Game — Build a 17-0 Team | NFL Draft Simulator">
-    <meta property="og:description" content="Spin a random NFL team and decade. Draft one legend. Fill 8 slots. A hidden engine sims 17 games. Can you go 17-0?">
+    <meta property="og:title" content="17-0 Game — Build a 17-0 Team | NFL & College Football">
+    <meta property="og:description" content="Spin a random NFL or college football team. Draft legends. Fill 8 slots. A hidden engine sims 17 games. Can you go 17-0?">
     <meta property="og:url" content="https://17-0game.com/">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://17-0game.com/favicon.png">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="17-0 Game — Build a 17-0 Team">
-    <meta name="twitter:description" content="Spin a random NFL team and decade. Draft one legend. Fill 8 slots. Can you go 17-0?">
+    <meta name="twitter:title" content="17-0 Game — Build a 17-0 Team | NFL & CFB">
+    <meta name="twitter:description" content="Spin a random NFL or college football team. Draft legends. Fill 8 slots. Can you go 17-0?">
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "17-0 Game",
         "url": "https://17-0game.com",
-        "description": "Play the 17-0 game online. Draft real NFL players from the 2000s, 2010s, and 2020s. Build your dream team and simulate a 17-game NFL season. Free browser game with 3,000+ players.",
+        "description": "Play the 17-0 game online. Draft real NFL players from the 2000s-2020s or college football stars from Power 4 conferences. Build your dream team and simulate a perfect season. Free browser game with 4,000+ players.",
         "applicationCategory": "Game",
         "operatingSystem": "Web Browser",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
@@ -42,7 +42,7 @@
                 "name": "How do you play the 17-0 game?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Spin to get a random NFL team and decade (2000s, 2010s, or 2020s). Browse the available players and pick one to fill a roster slot. Repeat for 8 rounds to fill QB, RB, WR, WR, TE, OL, EDGE, and DB. A hidden simulation engine then projects your 17-game season."
+                    "text": "Choose NFL or College Football mode. Spin to get a random team and era. Browse the available players and pick one to fill a roster slot. Repeat for 7-8 rounds to fill your roster. A hidden simulation engine then projects your season record."
                 }
             },
             {
@@ -50,7 +50,7 @@
                 "name": "How do you go 17-0?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Going 17-0 requires drafting elite players at every position, activating chemistry synergies between teammates, and avoiding weak links. The simulation factors in player ratings, badges (MVP, HOF, DPOY), era chemistry, and position balance."
+                    "text": "Going 17-0 requires drafting elite players at every position, activating chemistry synergies between teammates, and avoiding weak links. The simulation factors in player ratings, badges (MVP, Heisman, All-American), era chemistry, and position balance."
                 }
             },
             {
@@ -58,7 +58,7 @@
                 "name": "What players are in the 17-0 game?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "The game includes 3,000+ real NFL players from the 2000s, 2010s, and 2020s across all 32 teams. Player ratings are calculated from real career stats pulled from nflverse data. Every notable player who spent meaningful time with a franchise is included."
+                    "text": "NFL mode includes 3,000+ real players from the 2000s-2020s across all 32 teams. College Football mode features Power 4 conference stars (SEC, Big Ten, Big 12, ACC) from 2020-2024. All ratings are calculated from real stats."
                 }
             },
             {
@@ -66,7 +66,7 @@
                 "name": "Is the 17-0 game free?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes, the 17-0 game is completely free to play in any web browser. No downloads, no accounts, no ads."
+                    "text": "Yes, the 17-0 game is completely free to play in any web browser. No downloads, no accounts, no ads. Both NFL and College Football modes are free."
                 }
             }
         ]
@@ -96,8 +96,20 @@
                     <div class="landing-logo">17–0</div>
                     <div class="landing-tagline">DRAFT LEGENDS. SIMULATE PERFECTION.</div>
                 </div>
-                <p class="landing-desc">Pick one NFL star per spin across 2000s–2020s. Fill 8 roster slots. A hidden engine sims your 17-game season.</p>
-                <button class="landing-play-btn" onclick="startGame('scout')">DRAFT</button>
+                <p class="landing-desc">Pick one star per spin. Fill your roster. A hidden engine sims your season. Can you go 17-0?</p>
+                <div class="mode-select">
+                    <button class="mode-btn mode-nfl active" onclick="selectMode('nfl')">
+                        <span class="mode-icon">🏈</span>
+                        <span class="mode-label">NFL</span>
+                        <span class="mode-sub">32 teams · 2000s-2020s</span>
+                    </button>
+                    <button class="mode-btn mode-cfb" onclick="selectMode('cfb')">
+                        <span class="mode-icon">🎓</span>
+                        <span class="mode-label">CFB</span>
+                        <span class="mode-sub">Power 4 · 2020-2024</span>
+                    </button>
+                </div>
+                <button class="landing-play-btn" onclick="startGame()">DRAFT</button>
                 <div class="landing-links">
                     <button class="text-link" onclick="openModal('rules-modal')">Rules</button>
                     <span class="landing-dot"></span>
@@ -296,35 +308,40 @@
 
     <!-- SEO content — visible to crawlers, hidden during gameplay -->
     <section class="seo-content" id="seo-content">
-        <h1>17-0 Game: Build a Perfect NFL Team</h1>
-        <p>The <strong>17-0 game</strong> is a free NFL draft simulator where you build an all-time roster and try to achieve a perfect 17-0 season. Spin for a random team and decade, draft one real player per round, and fill 8 roster positions. A hidden simulation engine calculates your wins based on player ratings, chemistry, and team balance.</p>
+        <h1>17-0 Game: Build a Perfect NFL or College Football Team</h1>
+        <p>The <strong>17-0 game</strong> is a free football draft simulator where you build an all-time roster and try to achieve a perfect season. Choose <strong>NFL mode</strong> (all 32 teams, 2000s-2020s) or <strong>College Football mode</strong> (Power 4 conferences, 2020-2024). Spin for a random team, draft real players, and fill your roster. A hidden simulation engine calculates your wins.</p>
 
         <h2>How to Play the 17-0 Game</h2>
         <ol>
-            <li><strong>Spin</strong> — Get a random NFL franchise and decade (2000s, 2010s, or 2020s).</li>
+            <li><strong>Choose Mode</strong> — Pick NFL or College Football.</li>
+            <li><strong>Spin</strong> — Get a random team and era.</li>
             <li><strong>Draft</strong> — Browse every real player from that team and era. Pick one.</li>
-            <li><strong>Place</strong> — Assign your pick to a roster slot (QB, RB, WR, WR, TE, OL, EDGE, DB).</li>
-            <li><strong>Repeat</strong> — 8 rounds total. You get 2 re-spins per game.</li>
-            <li><strong>Simulate</strong> — A hidden engine projects your 17-game record based on player ratings, synergies, and team balance.</li>
+            <li><strong>Place</strong> — Assign your pick to a roster slot (QB, RB, WR, WR, TE, EDGE, DB).</li>
+            <li><strong>Repeat</strong> — Fill your roster. You get 2 re-spins per game.</li>
+            <li><strong>Simulate</strong> — A hidden engine projects your season record.</li>
         </ol>
 
-        <h2>3,000+ Real NFL Players</h2>
-        <p>Every player in the 17-0 game is real. Ratings are calculated from actual career stats — passing yards, touchdowns, sacks, interceptions, and more — sourced from nflverse data covering 2000 through 2024. All 32 NFL teams are included across three decades.</p>
+        <h2>NFL Mode: 3,000+ Real Players</h2>
+        <p>NFL mode includes every notable player from all 32 teams across the 2000s, 2010s, and 2020s. Ratings are calculated from real career stats sourced from nflverse data. Draft legends like Tom Brady, Patrick Mahomes, Aaron Donald, and more.</p>
+
+        <h2>College Football Mode: Power 4 Conferences</h2>
+        <p>CFB mode features stars from the SEC, Big Ten, Big 12, and ACC from 2020-2024. Draft Heisman winners like Caleb Williams, Bryce Young, and Joe Burrow. Build your ultimate college football roster from schools like Alabama, Ohio State, Georgia, and Texas.</p>
 
         <h2>Hidden Rating System</h2>
-        <p>The simulation engine uses position-weighted ratings, accolade bonuses (MVP, Hall of Fame, Defensive Player of the Year), teammate synergies, era chemistry, and a weakest-link penalty. Your team's projected record is never fully predictable — draft smart and hope for the best.</p>
+        <p>The simulation engine uses position-weighted ratings, accolade bonuses (MVP, Heisman, All-American, Hall of Fame), teammate synergies, era chemistry, and a weakest-link penalty. Your team's projected record is never fully predictable — draft smart and hope for the best.</p>
 
         <h2>Tips to Build a 17-0 Team</h2>
         <ul>
             <li>Prioritize QB — it carries the highest position weight in the sim.</li>
-            <li>Look for synergy pairs like Brady + Moss or Mahomes + Kelce.</li>
+            <li>Look for synergy pairs like Brady + Moss, Mahomes + Kelce, or Burrow + Chase.</li>
             <li>Avoid weak links — one low-rated player drags the entire team down.</li>
-            <li>Use your re-spins wisely if you roll a weak team/decade combo.</li>
-            <li>HOF and MVP badges give rating boosts, but they're capped — you can't rely on stacking awards alone.</li>
+            <li>Use your re-spins wisely if you roll a weak team/era combo.</li>
+            <li>Heisman winners and All-Americans get rating boosts in CFB mode.</li>
         </ul>
     </section>
 
     <script src="players.js"></script>
+    <script src="cfb_players.js"></script>
     <script src="engine.js"></script>
     <script src="game.js"></script>
 </body>
