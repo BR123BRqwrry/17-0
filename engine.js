@@ -126,17 +126,14 @@ class SimulationEngine {
         const maxWins = this.gameMode === 'cfb' ? 12 : 17;
 
         if (this.gameMode === 'cfb') {
-            // CFB: 12 game season (easier thresholds)
-            if (rating >= 95) return 12;
-            if (rating >= 93) return Math.random() > 0.6 ? 12 : 11;
-            if (rating >= 91) return Math.random() > 0.5 ? 11 : 10;
-            if (rating >= 89) return Math.random() > 0.5 ? 10 : 9;
-            if (rating >= 87) return Math.random() > 0.5 ? 9 : 8;
-            if (rating >= 85) return Math.random() > 0.5 ? 8 : 7;
-            if (rating >= 83) return Math.random() > 0.5 ? 7 : 6;
-            if (rating >= 81) return Math.random() > 0.5 ? 6 : 5;
-            if (rating >= 79) return Math.random() > 0.5 ? 5 : 4;
-            return Math.max(2, Math.floor(rating / 18));
+            // CFB: 12 game season - wider variance
+            if (rating >= 94) return 12;
+            if (rating >= 91) return 10 + Math.floor(Math.random() * 3); // 10-12
+            if (rating >= 88) return 9 + Math.floor(Math.random() * 3);  // 9-11
+            if (rating >= 85) return 8 + Math.floor(Math.random() * 3);  // 8-10
+            if (rating >= 82) return 6 + Math.floor(Math.random() * 4);  // 6-9
+            if (rating >= 79) return 4 + Math.floor(Math.random() * 4);  // 4-7
+            return 2 + Math.floor(Math.random() * 4);                    // 2-5
         } else {
             // NFL: 17 game season (easier thresholds)
             if (rating >= 95) return 17;
