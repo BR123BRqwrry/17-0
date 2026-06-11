@@ -266,7 +266,7 @@ function renderPlayers() {
         row.innerHTML = `
             <div class="p-info">
                 <span class="p-name">${player.name}</span>
-                <span class="p-meta">${posLabel} · ${state.currentSpin.team} · ${state.currentSpin.decade}</span>
+                <span class="p-meta">${posLabel} · ${state.currentSpin.team} · ${state.currentSpin.era}</span>
                 ${badgesHtml}
             </div>
             ${statsHtml}
