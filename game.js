@@ -41,9 +41,7 @@ function getEraKey(player) {
 }
 
 function getPosOrder() {
-    return state.gameMode === 'cfb'
-        ? ['QB', 'RB', 'WR1', 'WR2', 'TE', 'EDGE', 'DB']
-        : ['QB', 'RB', 'WR1', 'WR2', 'TE', 'OL', 'EDGE', 'DB'];
+    return ['QB', 'RB', 'WR1', 'WR2', 'TE', 'OL', 'EDGE', 'DB'];
 }
 
 const POS_ORDER = ['QB', 'RB', 'WR1', 'WR2', 'TE', 'OL', 'EDGE', 'DB'];
@@ -87,10 +85,10 @@ function resetDraft() {
         s.querySelector('.slot-name').textContent = '';
     });
 
-    // Hide OL slot in CFB mode (only 7 positions)
+    // Show OL slot for both modes
     const olSlot = document.getElementById('slot-OL');
     if (olSlot) {
-        olSlot.style.display = state.gameMode === 'cfb' ? 'none' : 'flex';
+        olSlot.style.display = 'flex';
     }
 
     // Show spin overlay, hide player list
