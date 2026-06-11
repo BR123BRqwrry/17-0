@@ -200,16 +200,22 @@ def calculate_rating(pos, stats):
     elif pos == 'EDGE':
         sacks = float(stats.get('SACKS', stats.get('SOLO', 0)))
         tfl = float(stats.get('TFL', 0))
-        sack_score = min(sacks / 15, 1.0) * 12
-        tfl_score = min(tfl / 20, 1.0) * 6
-        return min(99, max(72, int(76 + sack_score + tfl_score)))
+        tackles = float(stats.get('TKL', 0))
+        # CFB scale: 10 sacks is elite, 15 TFL is great, 80 tackles is solid
+        sack_score = min(sacks / 6, 1.0) * 10
+        tfl_score = min(tfl / 10, 1.0) * 6
+        tackle_score = min(tackles / 60, 1.0) * 6
+        return min(99, max(76, int(78 + sack_score + tfl_score + tackle_score)))
 
     elif pos == 'DB':
         ints = float(stats.get('INT', 0))
         pds = float(stats.get('PD', 0))
-        int_score = min(ints / 8, 1.0) * 12
-        pd_score = min(pds / 15, 1.0) * 6
-        return min(99, max(72, int(76 + int_score + pd_score)))
+        tackles = float(stats.get('TKL', 0))
+        # CFB scale: 4 INTs is great, 10 PDs is solid, 50 tackles is good
+        int_score = min(ints / 3, 1.0) * 10
+        pd_score = min(pds / 8, 1.0) * 6
+        tackle_score = min(tackles / 40, 1.0) * 6
+        return min(99, max(76, int(78 + int_score + pd_score + tackle_score)))
 
     elif pos == 'OL':
         # OL rating based on year in school
