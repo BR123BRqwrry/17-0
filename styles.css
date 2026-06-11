@@ -418,4 +418,6 @@ body {
     .field-panel { min-height: 340px; border-top: 1px solid var(--border); overflow: visible; }
     .player-panel { min-height: 50vh; border-right: none; }
     .topbar { flex-wrap: wrap; gap: 0.4rem; }
+    .p-row { padding: 0.75rem 0.8rem; }
+    .field-slot { min-height: 48px; }
 }
