@@ -46,12 +46,12 @@ class SimulationEngine {
         // Synergy calculation
         synergyBonus = this.calculateSynergies();
 
-        // Weakest link penalty
+        // Weakest link penalty (reduced)
         const ratings = allPlayers.map(p => p.rating);
         const minRating = Math.min(...ratings);
         const avgRating = ratings.reduce((a, b) => a + b, 0) / ratings.length;
-        if (minRating < avgRating - 5) {
-            balancePenalty = (avgRating - minRating - 5) * 0.45;
+        if (minRating < avgRating - 7) {
+            balancePenalty = (avgRating - minRating - 7) * 0.3;
             this.penalties.push({
                 label: `Weakest link: ${allPlayers.find(p => p.rating === minRating).name}`,
                 value: -balancePenalty.toFixed(1)
@@ -126,32 +126,30 @@ class SimulationEngine {
         const maxWins = this.gameMode === 'cfb' ? 12 : 17;
 
         if (this.gameMode === 'cfb') {
-            // CFB: 12 game season
-            if (rating >= 97) return 12;
-            if (rating >= 95) return Math.random() > 0.65 ? 12 : 11;
-            if (rating >= 93) return Math.random() > 0.5 ? 11 : 10;
-            if (rating >= 91) return Math.random() > 0.5 ? 10 : 9;
-            if (rating >= 89) return Math.random() > 0.5 ? 9 : 8;
-            if (rating >= 87) return Math.random() > 0.5 ? 8 : 7;
-            if (rating >= 85) return Math.random() > 0.5 ? 7 : 6;
-            if (rating >= 83) return Math.random() > 0.5 ? 6 : 5;
-            if (rating >= 81) return Math.random() > 0.5 ? 5 : 4;
-            if (rating >= 79) return Math.random() > 0.5 ? 4 : 3;
-            return Math.max(2, Math.floor(rating / 20));
+            // CFB: 12 game season (easier thresholds)
+            if (rating >= 95) return 12;
+            if (rating >= 93) return Math.random() > 0.6 ? 12 : 11;
+            if (rating >= 91) return Math.random() > 0.5 ? 11 : 10;
+            if (rating >= 89) return Math.random() > 0.5 ? 10 : 9;
+            if (rating >= 87) return Math.random() > 0.5 ? 9 : 8;
+            if (rating >= 85) return Math.random() > 0.5 ? 8 : 7;
+            if (rating >= 83) return Math.random() > 0.5 ? 7 : 6;
+            if (rating >= 81) return Math.random() > 0.5 ? 6 : 5;
+            if (rating >= 79) return Math.random() > 0.5 ? 5 : 4;
+            return Math.max(2, Math.floor(rating / 18));
         } else {
-            // NFL: 17 game season
-            if (rating >= 97) return 17;
-            if (rating >= 95) return Math.random() > 0.65 ? 17 : 16;
-            if (rating >= 93) return Math.random() > 0.5 ? 16 : 15;
-            if (rating >= 91) return Math.random() > 0.5 ? 14 : 13;
-            if (rating >= 89) return Math.random() > 0.5 ? 13 : 12;
-            if (rating >= 87) return Math.random() > 0.5 ? 12 : 11;
-            if (rating >= 85) return Math.random() > 0.5 ? 11 : 10;
-            if (rating >= 83) return Math.random() > 0.5 ? 10 : 9;
-            if (rating >= 81) return Math.random() > 0.5 ? 9 : 8;
-            if (rating >= 79) return Math.random() > 0.5 ? 8 : 7;
-            if (rating >= 77) return Math.random() > 0.5 ? 7 : 6;
-            return Math.max(3, Math.floor(rating / 14));
+            // NFL: 17 game season (easier thresholds)
+            if (rating >= 95) return 17;
+            if (rating >= 93) return Math.random() > 0.6 ? 17 : 16;
+            if (rating >= 91) return Math.random() > 0.5 ? 16 : 15;
+            if (rating >= 89) return Math.random() > 0.5 ? 14 : 13;
+            if (rating >= 87) return Math.random() > 0.5 ? 13 : 12;
+            if (rating >= 85) return Math.random() > 0.5 ? 12 : 11;
+            if (rating >= 83) return Math.random() > 0.5 ? 11 : 10;
+            if (rating >= 81) return Math.random() > 0.5 ? 10 : 9;
+            if (rating >= 79) return Math.random() > 0.5 ? 9 : 8;
+            if (rating >= 77) return Math.random() > 0.5 ? 8 : 7;
+            return Math.max(3, Math.floor(rating / 12));
         }
     }
 
