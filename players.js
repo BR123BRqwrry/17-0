@@ -2968,7 +2968,7 @@ const PLAYER_DB = [
     // 2020s
     { name: 'Justin Simmons', pos: ["DB"], team: 'Broncos', decade: '2020s', rating: 83, stats: { INT: 19, PD: 36 }, badges: [], synergies: [] },
     { name: 'Patrick Surtain', pos: ["DB"], team: 'Broncos', decade: '2020s', rating: 82, stats: { INT: 11, PD: 47 }, badges: [], synergies: [] },
-    { name: 'Lamar Jackson', pos: ["DB"], team: 'Broncos', decade: '2020s', rating: 79, stats: { INT: 0, PD: 2 }, badges: ["MVP"], synergies: ["Lamar_Andrews"] },
+    { name: 'Lamar Jackson', pos: ["DB"], team: 'Broncos', decade: '2020s', rating: 79, stats: { INT: 0, PD: 2 }, badges: [], synergies: [] },
     { name: 'Ja\'Quan McMillian', pos: ["DB"], team: 'Broncos', decade: '2020s', rating: 78, stats: { INT: 4, PD: 15 }, badges: [], synergies: [] },
     { name: 'Brandon Jones', pos: ["DB"], team: 'Broncos', decade: '2020s', rating: 77, stats: { INT: 3, PD: 10 }, badges: [], synergies: [] },
     { name: 'Bryce Callahan', pos: ["DB"], team: 'Broncos', decade: '2020s', rating: 77, stats: { INT: 2, PD: 9 }, badges: [], synergies: [] },
@@ -9221,7 +9221,7 @@ const PLAYER_DB = [
     // 2020s
     { name: 'A.J. Terrell', pos: ["DB"], team: 'Falcons', decade: '2020s', rating: 80, stats: { INT: 6, PD: 49 }, badges: [], synergies: [] },
     { name: 'Jessie Bates', pos: ["DB"], team: 'Falcons', decade: '2020s', rating: 80, stats: { INT: 10, PD: 21 }, badges: [], synergies: [] },
-    { name: 'Lamar Jackson', pos: ["DB"], team: 'Falcons', decade: '2020s', rating: 79, stats: { INT: 0, PD: 0 }, badges: ["MVP"], synergies: ["Lamar_Andrews"] },
+    { name: 'Lamar Jackson', pos: ["DB"], team: 'Falcons', decade: '2020s', rating: 79, stats: { INT: 0, PD: 0 }, badges: [], synergies: [] },
     { name: 'Blidi Wreh-Wilson', pos: ["DB"], team: 'Falcons', decade: '2020s', rating: 77, stats: { INT: 3, PD: 4 }, badges: [], synergies: [] },
     { name: 'Dee Alford', pos: ["DB"], team: 'Falcons', decade: '2020s', rating: 77, stats: { INT: 1, PD: 24 }, badges: [], synergies: [] },
     { name: 'Isaiah Oliver', pos: ["DB"], team: 'Falcons', decade: '2020s', rating: 77, stats: { INT: 1, PD: 16 }, badges: [], synergies: [] },
@@ -11156,7 +11156,7 @@ const PLAYER_DB = [
     // 2020s
     { name: 'Ahmad Gardner', pos: ["DB"], team: 'Jets', decade: '2020s', rating: 79, stats: { INT: 3, PD: 41 }, badges: [], synergies: [] },
     { name: 'Ashtyn Davis', pos: ["DB"], team: 'Jets', decade: '2020s', rating: 79, stats: { INT: 8, PD: 15 }, badges: [], synergies: [] },
-    { name: 'Lamar Jackson', pos: ["DB"], team: 'Jets', decade: '2020s', rating: 79, stats: { INT: 0, PD: 2 }, badges: ["MVP"], synergies: ["Lamar_Andrews"] },
+    { name: 'Lamar Jackson', pos: ["DB"], team: 'Jets', decade: '2020s', rating: 79, stats: { INT: 0, PD: 2 }, badges: [], synergies: [] },
     { name: 'Brandin Echols', pos: ["DB"], team: 'Jets', decade: '2020s', rating: 78, stats: { INT: 5, PD: 16 }, badges: [], synergies: [] },
     { name: 'D.J. Reed', pos: ["DB"], team: 'Jets', decade: '2020s', rating: 78, stats: { INT: 2, PD: 31 }, badges: [], synergies: [] },
     { name: 'Jordan Whitehead', pos: ["DB"], team: 'Jets', decade: '2020s', rating: 78, stats: { INT: 6, PD: 17 }, badges: [], synergies: [] },
