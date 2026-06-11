@@ -283,8 +283,16 @@ function selectPlayer(player, rowEl) {
     document.querySelectorAll('.p-row').forEach(r => r.classList.remove('selected'));
     rowEl.classList.add('selected');
 
-    // Highlight valid field slots
+    // Get valid field slots
     const validSlots = getValidSlots(player);
+
+    // Auto-place if only one valid slot
+    if (validSlots.length === 1) {
+        placePlayer(player, validSlots[0]);
+        return;
+    }
+
+    // Highlight valid field slots for manual selection
     document.querySelectorAll('.field-slot').forEach(s => {
         s.classList.remove('highlight');
         if (validSlots.includes(s.dataset.pos) && !s.classList.contains('filled')) {
