@@ -123,31 +123,50 @@ class SimulationEngine {
     }
 
     ratingToWins(rating) {
-        if (rating >= 97) return 17;
-        if (rating >= 95) return Math.random() > 0.65 ? 17 : 16;
-        if (rating >= 93) return Math.random() > 0.5 ? 16 : 15;
-        if (rating >= 91) return Math.random() > 0.5 ? 14 : 13;
-        if (rating >= 89) return Math.random() > 0.5 ? 13 : 12;
-        if (rating >= 87) return Math.random() > 0.5 ? 12 : 11;
-        if (rating >= 85) return Math.random() > 0.5 ? 11 : 10;
-        if (rating >= 83) return Math.random() > 0.5 ? 10 : 9;
-        if (rating >= 81) return Math.random() > 0.5 ? 9 : 8;
-        if (rating >= 79) return Math.random() > 0.5 ? 8 : 7;
-        if (rating >= 77) return Math.random() > 0.5 ? 7 : 6;
-        return Math.max(3, Math.floor(rating / 14));
+        const maxWins = this.gameMode === 'cfb' ? 12 : 17;
+
+        if (this.gameMode === 'cfb') {
+            // CFB: 12 game season
+            if (rating >= 97) return 12;
+            if (rating >= 95) return Math.random() > 0.65 ? 12 : 11;
+            if (rating >= 93) return Math.random() > 0.5 ? 11 : 10;
+            if (rating >= 91) return Math.random() > 0.5 ? 10 : 9;
+            if (rating >= 89) return Math.random() > 0.5 ? 9 : 8;
+            if (rating >= 87) return Math.random() > 0.5 ? 8 : 7;
+            if (rating >= 85) return Math.random() > 0.5 ? 7 : 6;
+            if (rating >= 83) return Math.random() > 0.5 ? 6 : 5;
+            if (rating >= 81) return Math.random() > 0.5 ? 5 : 4;
+            if (rating >= 79) return Math.random() > 0.5 ? 4 : 3;
+            return Math.max(2, Math.floor(rating / 20));
+        } else {
+            // NFL: 17 game season
+            if (rating >= 97) return 17;
+            if (rating >= 95) return Math.random() > 0.65 ? 17 : 16;
+            if (rating >= 93) return Math.random() > 0.5 ? 16 : 15;
+            if (rating >= 91) return Math.random() > 0.5 ? 14 : 13;
+            if (rating >= 89) return Math.random() > 0.5 ? 13 : 12;
+            if (rating >= 87) return Math.random() > 0.5 ? 12 : 11;
+            if (rating >= 85) return Math.random() > 0.5 ? 11 : 10;
+            if (rating >= 83) return Math.random() > 0.5 ? 10 : 9;
+            if (rating >= 81) return Math.random() > 0.5 ? 9 : 8;
+            if (rating >= 79) return Math.random() > 0.5 ? 8 : 7;
+            if (rating >= 77) return Math.random() > 0.5 ? 7 : 6;
+            return Math.max(3, Math.floor(rating / 14));
+        }
     }
 
     simulateSeason() {
         const result = this.calculateTeamRating();
+        const totalGames = this.gameMode === 'cfb' ? 12 : 17;
         const wins = result.wins;
-        const losses = 17 - wins;
+        const losses = totalGames - wins;
 
         // Generate week-by-week results
         const weeks = [];
         let winsLeft = wins;
         let lossesLeft = losses;
 
-        for (let i = 0; i < 17; i++) {
+        for (let i = 0; i < totalGames; i++) {
             if (lossesLeft === 0) {
                 weeks.push('W');
                 winsLeft--;

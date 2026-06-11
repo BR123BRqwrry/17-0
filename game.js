@@ -392,11 +392,12 @@ function runSim() {
         grid.appendChild(el);
     });
 
+    const totalGames = state.gameMode === 'cfb' ? 12 : 17;
     let idx = 0;
     const interval = setInterval(() => {
-        if (idx >= 17) { clearInterval(interval); setTimeout(() => showResults(result), 500); return; }
+        if (idx >= totalGames) { clearInterval(interval); setTimeout(() => showResults(result), 500); return; }
         grid.children[idx].classList.add('show', result.weeks[idx]);
-        bar.style.width = `${((idx + 1) / 17) * 100}%`;
+        bar.style.width = `${((idx + 1) / totalGames) * 100}%`;
         idx++;
     }, 120);
 }
@@ -408,11 +409,24 @@ function showResults(result) {
     document.getElementById('rr-l').textContent = result.losses;
 
     rec.classList.remove('perfect');
-    if (result.wins === 17) { rec.classList.add('perfect'); document.getElementById('result-sub').textContent = 'PERFECT SEASON'; launchConfetti(); }
-    else if (result.wins >= 15) document.getElementById('result-sub').textContent = 'ELITE SEASON';
-    else if (result.wins >= 12) document.getElementById('result-sub').textContent = 'PLAYOFF TEAM';
-    else if (result.wins >= 9) document.getElementById('result-sub').textContent = 'MIDDLE OF THE PACK';
-    else document.getElementById('result-sub').textContent = 'REBUILD MODE';
+    const maxWins = state.gameMode === 'cfb' ? 12 : 17;
+    if (result.wins === maxWins) {
+        rec.classList.add('perfect');
+        document.getElementById('result-sub').textContent = state.gameMode === 'cfb' ? 'UNDEFEATED SEASON' : 'PERFECT SEASON';
+        launchConfetti();
+    }
+    else if (state.gameMode === 'cfb') {
+        if (result.wins >= 11) document.getElementById('result-sub').textContent = 'PLAYOFF BOUND';
+        else if (result.wins >= 9) document.getElementById('result-sub').textContent = 'NY6 BOWL';
+        else if (result.wins >= 7) document.getElementById('result-sub').textContent = 'BOWL ELIGIBLE';
+        else if (result.wins >= 5) document.getElementById('result-sub').textContent = 'DISAPPOINTING SEASON';
+        else document.getElementById('result-sub').textContent = 'REBUILD MODE';
+    } else {
+        if (result.wins >= 15) document.getElementById('result-sub').textContent = 'ELITE SEASON';
+        else if (result.wins >= 12) document.getElementById('result-sub').textContent = 'PLAYOFF TEAM';
+        else if (result.wins >= 9) document.getElementById('result-sub').textContent = 'MIDDLE OF THE PACK';
+        else document.getElementById('result-sub').textContent = 'REBUILD MODE';
+    }
 
     const roster = document.getElementById('result-roster');
     roster.innerHTML = '';
